@@ -31,6 +31,7 @@
     "test": "tsx --test test/*.test.ts",
     "typecheck": "tsc --noEmit",
     "example": "npm --prefix examples/basic run dev",
+    "demo": "npx --yes serve examples/standalone -p 4173",
     "prepublishOnly": "npm run typecheck && npm test && npm run build"
   },
   "peerDependencies": {

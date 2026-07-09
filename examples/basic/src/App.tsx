@@ -37,6 +37,7 @@ export function App() {
       <section className="map-panel">
         <DominicanRepublicMap
           className="demo-map"
+          height="100%"
           showLabels
           enableZoom
           selectionMode="multiple"
@@ -47,16 +48,16 @@ export function App() {
           markers={[
             {
               id: "sdq",
-              x: 436,
-              y: 341,
+              x: 444.68,
+              y: 328.42,
               label: "Distrito Nacional",
               color: "#ef4444",
               provinceId: "DO-01",
             },
             {
               id: "sti",
-              x: 320,
-              y: 180,
+              x: 237.91,
+              y: 135.92,
               label: "Santiago",
               color: "#f59e0b",
               provinceId: "DO-25",

@@ -7,5 +7,6 @@ coverage
 .env.*
 examples/basic/dist
 examples/basic/node_modules
+examples/basic/.vite
 .vite
 *.tsbuildinfo

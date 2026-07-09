@@ -88,13 +88,27 @@ getProvincesByRegion("Cibao Norte");
 
 ## Examples
 
+### HTML standalone (sin build)
+
+```bash
+npm run demo
+# o
+npx serve examples/standalone
+```
+
+Archivo: [`examples/standalone/index.html`](./examples/standalone/index.html)  
+También en [`docs/demo/index.html`](./docs/demo/index.html).
+
+> `examples/basic/index.html` es un entry de **Vite + React**. No funciona abriéndolo como `file://`; usa el comando de abajo.
+
+### Example React (Vite)
+
 ```bash
 npm install
-npm run build
 npm run example
 ```
 
-El ejemplo en `examples/basic` muestra choropleth, selección múltiple, marcadores y zoom táctil.
+El example en `examples/basic` muestra choropleth, selección múltiple, marcadores y zoom táctil.
 
 ## Docs
 

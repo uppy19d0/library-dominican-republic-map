@@ -37,7 +37,7 @@ export function DominicanRepublicMap({
   style,
   "aria-label": ariaLabel = MAP_NAME_ES,
   width = "100%",
-  height = "auto",
+  height,
   data,
   defaultFill = DEFAULT_FILL,
   defaultStroke = DEFAULT_STROKE,
@@ -171,7 +171,13 @@ export function DominicanRepublicMap({
       ]
         .filter(Boolean)
         .join(" ")}
-      style={{ width, height, aspectRatio, ...style }}
+      style={{
+        width,
+        height: height ?? undefined,
+        aspectRatio: height ? undefined : aspectRatio,
+        minHeight: height ? undefined : 280,
+        ...style,
+      }}
       {...(enableZoom ? gestureHandlers : {})}
     >
       <svg
