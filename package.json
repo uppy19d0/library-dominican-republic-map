@@ -1,0 +1,82 @@
+{
+  "name": "react-dominican-republic-map",
+  "version": "1.0.0",
+  "description": "Interactive, touch-friendly React SVG map of the Dominican Republic with provinces, choropleth, markers, zoom/pan, and accessibility.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "docs"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "scripts": {
+    "build": "tsup && node scripts/copy-css.js",
+    "dev": "tsup --watch",
+    "test": "tsx --test test/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "example": "npm --prefix examples/basic run dev",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tsup": "^8.5.0",
+    "tsx": "^4.23.0",
+    "typescript": "^5.8.3"
+  },
+  "keywords": [
+    "react",
+    "dominican-republic",
+    "mapa",
+    "map",
+    "svg",
+    "provinces",
+    "provincias",
+    "choropleth",
+    "interactive",
+    "touch",
+    "typescript"
+  ],
+  "author": {
+    "name": "Luis Aneuris Tavarez De Jesus",
+    "url": "https://www.ltavarez.me/"
+  },
+  "homepage": "https://github.com/uppy19d0/react-dominican-republic-map#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uppy19d0/react-dominican-republic-map.git"
+  },
+  "bugs": {
+    "url": "https://github.com/uppy19d0/react-dominican-republic-map/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
