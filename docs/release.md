@@ -36,6 +36,7 @@ The live README preview is deployed by `.github/workflows/pages.yml`:
 
 - URL: `https://uppy19d0.github.io/library-dominican-republic-map/docs/demo/`
 - Trigger: push to `main` or manual `workflow_dispatch`
+- Target branch: `gh-pages`
 - Artifact content: `docs/` and generated `dist/`
 
 The demo imports `../../dist/element.js` and `../../dist/styles.css`, so the Pages artifact must include `dist/` at the site root.
