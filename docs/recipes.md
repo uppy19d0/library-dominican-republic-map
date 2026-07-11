@@ -197,3 +197,92 @@ map.addEventListener("popupopen", (event) => {
 });
 ```
 
+## 10. Dashboard gubernamental o institucional
+
+Este patron combina choropleth, colores por estado, iconos operativos y popups.
+
+```tsx
+<DominicanRepublicMap
+  showLabels
+  showPopup
+  selectionMode="multiple"
+  colors={{
+    defaultFill: "#dbeafe",
+    defaultStroke: "#bfdbfe",
+    hoverFill: "#93c5fd",
+    selectedFill: "#1d4ed8",
+    markerStroke: "#ffffff",
+  }}
+  colorScale={["#eff6ff", "#bfdbfe", "#60a5fa", "#1d4ed8"]}
+  data={{
+    "DO-01": {
+      value: 92,
+      label: "92% cobertura",
+      selectedFill: "#be123c",
+      popupTitle: "Distrito Nacional",
+      popup: "Centro de servicios, salud y respuesta ciudadana.",
+    },
+    "DO-25": {
+      value: 76,
+      label: "76% cobertura",
+      selectedFill: "#047857",
+      popupTitle: "Santiago",
+      popup: "Regional norte con brigadas activas.",
+    },
+    "DO-32": {
+      value: 64,
+      label: "64% cobertura",
+      hoverFill: "#fde68a",
+      selectedFill: "#b45309",
+      popupTitle: "Santo Domingo",
+      popup: "Zona metropolitana en seguimiento.",
+    },
+  }}
+  markers={[
+    {
+      id: "hospital-sdq",
+      x: 444.68,
+      y: 328.42,
+      icon: "hospital",
+      label: "Hospital movil",
+      color: "#dc2626",
+      popup: "Unidad medica disponible",
+      provinceId: "DO-01",
+    },
+    {
+      id: "pickup-sti",
+      x: 237.91,
+      y: 135.92,
+      icon: "pickup",
+      label: "Brigada norte",
+      color: "#f59e0b",
+      popup: "Equipo de respuesta en campo",
+      provinceId: "DO-25",
+    },
+    {
+      id: "people-sdo",
+      x: 491.53,
+      y: 329.08,
+      icon: "people",
+      label: "Equipo social",
+      color: "#7c3aed",
+      popup: "Personal asignado a visitas comunitarias",
+      provinceId: "DO-32",
+    },
+  ]}
+/>
+```
+
+Web Component equivalente:
+
+```html
+<dr-map
+  show-labels
+  show-popup
+  selection-mode="multiple"
+  colors='{"defaultFill":"#dbeafe","defaultStroke":"#bfdbfe","hoverFill":"#93c5fd","selectedFill":"#1d4ed8","markerStroke":"#ffffff"}'
+  color-scale="#eff6ff,#bfdbfe,#60a5fa,#1d4ed8"
+  data='{"DO-01":{"value":92,"label":"92% cobertura","selectedFill":"#be123c","popupTitle":"Distrito Nacional","popup":"Centro de servicios, salud y respuesta ciudadana."},"DO-25":{"value":76,"label":"76% cobertura","selectedFill":"#047857","popupTitle":"Santiago","popup":"Regional norte con brigadas activas."}}'
+  markers='[{"id":"hospital-sdq","x":444.68,"y":328.42,"icon":"hospital","label":"Hospital movil","color":"#dc2626","popup":"Unidad medica disponible","provinceId":"DO-01"},{"id":"pickup-sti","x":237.91,"y":135.92,"icon":"pickup","label":"Brigada norte","color":"#f59e0b","popup":"Equipo de respuesta en campo","provinceId":"DO-25"}]'
+></dr-map>
+```

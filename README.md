@@ -35,14 +35,31 @@ Creado por [Luis Aneuris Tavarez De Jesus](https://www.ltavarez.me/).
 npm install dominican-republic-map
 ```
 
+Para Vue, Svelte, Angular o Vanilla JS instala tambien los peer dependencies:
+
+```bash
+npm install react react-dom dominican-republic-map
+```
+
 ## Framework support
 
 - React: usa `DominicanRepublicMap`
 - Vue / Svelte / Angular / Vanilla JS: usa `<dr-map>` (Web Component estándar)
+- Guia de inicio: [docs/getting-started.md](./docs/getting-started.md)
 - Guías por framework: [docs/frameworks](./docs/frameworks/README.md)
 - Recetas de uso de la API: [docs/recipes.md](./docs/recipes.md)
 - Showcase de demos: [docs/demo](./docs/demo/index.html)
 - Release automation: [docs/release.md](./docs/release.md)
+
+## Pick the right API
+
+| Proyecto | Usa | Ideal para |
+| --- | --- | --- |
+| React | `DominicanRepublicMap` | Props tipadas, render custom, callbacks React |
+| Vue | `<dr-map>` | Templates, eventos DOM, props complejas con `mapProps` |
+| Svelte | `<dr-map>` | Atributos JSON, eventos DOM, integracion simple |
+| Angular | `<dr-map>` | Custom Elements con `CUSTOM_ELEMENTS_SCHEMA` |
+| HTML / Vanilla | `<dr-map>` | Demos estaticas, dashboards simples, CMS |
 
 ## Quick Start
 

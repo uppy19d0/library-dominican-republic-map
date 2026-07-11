@@ -216,6 +216,36 @@ Uso:
 ></dr-map>
 ```
 
+### Atributos soportados
+
+| Atributo | Prop React equivalente | Tipo |
+| --- | --- | --- |
+| `aria-label` | `aria-label` | string |
+| `width` / `height` | `width` / `height` | string o number |
+| `selection-mode` | `selectionMode` | `"none"` / `"single"` / `"multiple"` |
+| `show-labels` | `showLabels` | boolean |
+| `show-tooltip` | `showTooltip` | boolean |
+| `show-popup` | `showPopup` | boolean |
+| `close-popup-on-map-click` | `closePopupOnMapClick` | boolean |
+| `enable-zoom` | `enableZoom` | boolean |
+| `show-zoom-controls` | `showZoomControls` | boolean |
+| `animated` | `animated` | boolean |
+| `default-fill` | `defaultFill` | color |
+| `default-stroke` | `defaultStroke` | color |
+| `hover-fill` | `hoverFill` | color |
+| `selected-fill` | `selectedFill` | color |
+| `disabled-fill` | `disabledFill` | color |
+| `value-min` / `value-max` | `valueMin` / `valueMax` | number |
+| `color-scale` | `colorScale` | colores separados por coma |
+| `disabled-provinces` | `disabledProvinces` | JSON `ProvinceId[]` |
+| `selected-provinces` | `selectedProvinces` | JSON `ProvinceId[]` |
+| `default-selected-provinces` | `defaultSelectedProvinces` | JSON `ProvinceId[]` |
+| `data` | `data` | JSON `ProvinceData` |
+| `markers` | `markers` | JSON `MapMarker[]` |
+| `colors` | `colors` | JSON `MapColors` |
+
+Los booleanos pueden usarse como atributo vacio (`show-popup`) o como string (`show-popup="false"`). Para pasar funciones, render custom o datos grandes, usa la propiedad `mapProps` desde JavaScript.
+
 Eventos DOM emitidos:
 
 - `provinceclick`
@@ -228,6 +258,18 @@ Eventos DOM emitidos:
 - `mapclick`
 - `popupopen`
 - `popupclose`
+
+Payloads principales:
+
+| Evento | `event.detail` |
+| --- | --- |
+| `provinceclick`, `provincedoubleclick`, `provinceenter`, `provinceleave` | `{ province, data }` |
+| `selectionchange` | `{ selected }` |
+| `markerclick` | `{ marker }` |
+| `zoomchange` | `{ scale, x, y }` |
+| `mapclick` | `{ x, y }` |
+| `popupopen` | `{ type: "province", province, data }` o `{ type: "marker", marker, province }` |
+| `popupclose` | `undefined` |
 
 También puedes setear props complejas desde JS:
 
