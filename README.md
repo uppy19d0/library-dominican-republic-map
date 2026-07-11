@@ -9,13 +9,13 @@ Creado por [Luis Aneuris Tavarez De Jesus](https://www.ltavarez.me/).
 
 ## Screenshot
 
-[![Open the interactive dominican-republic-map preview](./docs/assets/screenshot.svg)](https://uppy19d0.github.io/library-dominican-republic-map/docs/demo/)
+[![Open the interactive dominican-republic-map preview](./docs/assets/screenshot.svg)](https://raw.githack.com/uppy19d0/library-dominican-republic-map/gh-pages/docs/demo/index.html)
 
 ## Interactive preview
 
-El README de GitHub y npm no permite ejecutar JavaScript embebido, por eso el preview interactivo vive en GitHub Pages. La imagen de arriba abre el demo con eventos, choropleth, colores, marcadores, iconos y popups.
+El README de GitHub y npm no permite ejecutar JavaScript embebido, por eso la imagen de arriba abre un demo externo con eventos, choropleth, colores, marcadores, iconos y popups.
 
-[Open interactive preview](https://uppy19d0.github.io/library-dominican-republic-map/docs/demo/) · [View demo source](./docs/demo/index.html)
+[Open interactive preview](https://raw.githack.com/uppy19d0/library-dominican-republic-map/gh-pages/docs/demo/index.html) · [GitHub Pages URL](https://uppy19d0.github.io/library-dominican-republic-map/docs/demo/) · [View demo source](./docs/demo/index.html)
 
 ## Features
 
@@ -54,7 +54,7 @@ npm install react react-dom dominican-republic-map
 - Guia de inicio: [docs/getting-started.md](./docs/getting-started.md)
 - Guías por framework: [docs/frameworks](./docs/frameworks/README.md)
 - Recetas de uso de la API: [docs/recipes.md](./docs/recipes.md)
-- Preview interactivo: [GitHub Pages demo](https://uppy19d0.github.io/library-dominican-republic-map/docs/demo/)
+- Preview interactivo: [live demo](https://raw.githack.com/uppy19d0/library-dominican-republic-map/gh-pages/docs/demo/index.html)
 - Código del showcase: [docs/demo](./docs/demo/index.html)
 - Release automation: [docs/release.md](./docs/release.md)
 
