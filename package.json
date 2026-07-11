@@ -1,7 +1,7 @@
 {
   "name": "react-dominican-republic-map",
   "version": "1.0.0",
-  "description": "Interactive, touch-friendly React SVG map of the Dominican Republic with provinces, choropleth, markers, zoom/pan, and accessibility.",
+  "description": "Interactive, touch-friendly Dominican Republic SVG map for React and Web Components (Vue, Svelte, Angular, vanilla).",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -12,6 +12,12 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "default": "./dist/index.js"
+    },
+    "./element": {
+      "types": "./dist/element.d.ts",
+      "import": "./dist/element.js",
+      "require": "./dist/element.cjs",
+      "default": "./dist/element.js"
     },
     "./styles.css": "./dist/styles.css",
     "./package.json": "./package.json"
@@ -31,6 +37,10 @@
     "test": "tsx --test test/*.test.ts",
     "typecheck": "tsc --noEmit",
     "example": "npm --prefix examples/basic run dev",
+    "example:react": "npm --prefix examples/basic run dev",
+    "example:vue": "npm --prefix examples/vue run dev",
+    "example:svelte": "npm --prefix examples/svelte run dev",
+    "example:vanilla": "npm --prefix examples/vanilla run dev",
     "demo": "npx --yes serve examples/standalone -p 4173",
     "prepublishOnly": "npm run typecheck && npm test && npm run build"
   },
@@ -48,8 +58,16 @@
     "tsx": "^4.23.0",
     "typescript": "^5.8.3"
   },
+  "overrides": {
+    "esbuild": "0.28.1"
+  },
   "keywords": [
     "react",
+    "vue",
+    "svelte",
+    "web-component",
+    "angular",
+    "vanilla-js",
     "dominican-republic",
     "mapa",
     "map",

@@ -3,9 +3,13 @@
 [![CI](https://github.com/uppy19d0/react-dominican-republic-map/actions/workflows/ci.yml/badge.svg)](https://github.com/uppy19d0/react-dominican-republic-map/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-Mapa SVG interactivo y táctil de la **República Dominicana** para React. Incluye las 32 provincias, selección, choropleth, marcadores, zoom/pan con rueda y pellizco, tooltips, teclado y estilos listos para producción.
+Mapa SVG interactivo y táctil de la **República Dominicana**. Incluye las 32 provincias, selección, choropleth, marcadores, zoom/pan con rueda y pellizco, tooltips, teclado y estilos listos para producción.
 
 Creado por [Luis Aneuris Tavarez De Jesus](https://www.ltavarez.me/).
+
+## Screenshot
+
+![react-dominican-republic-map screenshot](./docs/assets/screenshot.svg)
 
 ## Features
 
@@ -19,13 +23,21 @@ Creado por [Luis Aneuris Tavarez De Jesus](https://www.ltavarez.me/).
 - Accesible: `role="button"`, teclado Enter/Espacio, `aria-*`
 - TypeScript completo
 - CSS con variables para theming
+- Paleta de colores unificada con prop `colors`
 - Zero runtime dependencies (solo peer `react` / `react-dom`)
+- Soporte cross-framework con Web Component (`<dr-map>`) para React, Vue, Svelte, etc.
 
 ## Installation
 
 ```bash
 npm install react-dominican-republic-map
 ```
+
+## Framework support
+
+- React: usa `DominicanRepublicMap`
+- Vue / Svelte / Angular / Vanilla JS: usa `<dr-map>` (Web Component estándar)
+- Guías por framework: [docs/frameworks](./docs/frameworks/README.md)
 
 ## Quick Start
 
@@ -62,10 +74,13 @@ export function App() {
 | `showZoomControls` | `boolean` | `true` | Botones + / − / reset |
 | `showLabels` | `boolean` | `false` | Abreviaturas en el mapa |
 | `showTooltip` | `boolean` | `true` | Tooltip al hover/focus |
+| `colors` | `MapColors` | — | Paleta unificada (`defaultFill`, `selectedFill`, etc.) |
 | `colorScale` | `string[]` | blues | Escala choropleth |
 | `markers` | `MapMarker[]` | `[]` | Puntos sobre el mapa |
 | `onProvinceClick` | `(e) => void` | — | Click / tap / Enter |
+| `onProvinceDoubleClick` | `(e) => void` | — | Doble click / doble tap |
 | `onSelectionChange` | `(ids) => void` | — | Cambio de selección |
+| `onMapClick` | `(e) => void` | — | Click en el fondo del SVG |
 | `getProvinceStyle` | `(province, state) => style` | — | Estilo custom por provincia |
 
 Ver [docs/api.md](./docs/api.md) para la API completa.
@@ -87,6 +102,80 @@ getProvincesByRegion("Cibao Norte");
 ```
 
 ## Examples
+
+Ejemplos completos: [examples/README.md](./examples/README.md)
+
+### React (componente)
+
+```tsx
+import { DominicanRepublicMap } from "react-dominican-republic-map";
+import "react-dominican-republic-map/styles.css";
+
+<DominicanRepublicMap
+  colors={{
+    defaultFill: "#dbeafe",
+    selectedFill: "#1d4ed8",
+    markerFill: "#dc2626",
+  }}
+  onProvinceClick={({ province }) => console.log("React:", province.id)}
+/>;
+```
+
+### Vue / Svelte / Angular / otros (Web Component)
+
+```ts
+import "react-dominican-republic-map/element";
+import "react-dominican-republic-map/styles.css";
+```
+
+> Nota: esta librería usa React internamente, así que en Vue/Svelte también debes tener instalados `react` y `react-dom` (peer dependencies).
+
+```html
+<dr-map
+  show-labels
+  selection-mode="multiple"
+  colors='{"defaultFill":"#dbeafe","selectedFill":"#1d4ed8"}'
+></dr-map>
+```
+
+Eventos DOM:
+
+```ts
+const map = document.querySelector("dr-map");
+map?.addEventListener("provinceclick", (event) => {
+  console.log("Web component:", event.detail.province.id);
+});
+```
+
+### Angular quick use
+
+```ts
+// main.ts
+import "react-dominican-republic-map/element";
+import "react-dominican-republic-map/styles.css";
+```
+
+```ts
+// app.module.ts
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
+
+@NgModule({
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+})
+export class AppModule {}
+```
+
+```html
+<dr-map show-labels selection-mode="single"></dr-map>
+```
+
+### Vue / Svelte / Vanilla (runnable)
+
+```bash
+npm --prefix examples/vue install && npm run example:vue
+npm --prefix examples/svelte install && npm run example:svelte
+npm --prefix examples/vanilla install && npm run example:vanilla
+```
 
 ### HTML standalone (sin build)
 
@@ -115,6 +204,7 @@ El example en `examples/basic` muestra choropleth, selección múltiple, marcado
 - [API](./docs/api.md)
 - [Theming](./docs/theming.md)
 - [Touch & zoom](./docs/gestures.md)
+- [Framework guides](./docs/frameworks/README.md)
 
 ## License
 

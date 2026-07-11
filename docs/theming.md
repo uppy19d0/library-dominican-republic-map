@@ -42,6 +42,22 @@ También puedes pintar provincias con props:
 />
 ```
 
+O en un solo objeto con `colors`:
+
+```tsx
+<DominicanRepublicMap
+  colors={{
+    defaultFill: "#1e293b",
+    defaultStroke: "#94a3b8",
+    hoverFill: "#38bdf8",
+    selectedFill: "#0ea5e9",
+    markerFill: "#f43f5e",
+    markerStroke: "#ffffff",
+    focusStroke: "#f59e0b",
+  }}
+/>
+```
+
 Importa los estilos una vez en tu app:
 
 ```ts

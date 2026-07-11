@@ -38,6 +38,18 @@ Pasa valores numéricos en `data` y opcionalmente `colorScale`, `valueMin`, `val
 
 Prioridad de fill: `disabled` → `selected` → `hover` → `data.fill` → escala → `defaultFill`.
 
+También puedes pasar una paleta completa con `colors`:
+
+```tsx
+<DominicanRepublicMap
+  colors={{
+    defaultFill: "#dbeafe",
+    selectedFill: "#1d4ed8",
+    markerFill: "#dc2626",
+  }}
+/>
+```
+
 ### Markers
 
 Las coordenadas `x` / `y` están en el espacio del `viewBox` del mapa:
@@ -62,14 +74,68 @@ Las coordenadas `x` / `y` están en el espacio del `viewBox` del mapa:
 
 ```ts
 onProvinceClick?: (event: ProvinceEvent) => void
+onProvinceDoubleClick?: (event: ProvinceEvent) => void
 onProvinceEnter?: (event: ProvinceEvent) => void
 onProvinceLeave?: (event: ProvinceEvent) => void
 onSelectionChange?: (selected: ProvinceId[]) => void
 onMarkerClick?: (event: MarkerEvent) => void
 onZoomChange?: (zoom: ZoomState) => void
+onMapClick?: (event: MouseEvent<SVGSVGElement>) => void
 ```
 
 `ProvinceEvent` incluye `province`, `data` opcional y el evento nativo.
+
+Guías completas por framework: [docs/frameworks](./frameworks/README.md).
+
+## Web Component (`<dr-map>`)
+
+Registra el custom element:
+
+```ts
+import { registerDominicanRepublicMapElement } from "react-dominican-republic-map";
+registerDominicanRepublicMapElement();
+```
+
+Registro automático:
+
+```ts
+import "react-dominican-republic-map/element";
+```
+
+Uso:
+
+```html
+<dr-map
+  show-labels
+  selection-mode="multiple"
+  colors='{"defaultFill":"#dbeafe","selectedFill":"#1d4ed8"}'
+  data='{"DO-01":{"value":200}}'
+></dr-map>
+```
+
+Eventos DOM emitidos:
+
+- `provinceclick`
+- `provincedoubleclick`
+- `provinceenter`
+- `provinceleave`
+- `selectionchange`
+- `markerclick`
+- `zoomchange`
+- `mapclick`
+
+También puedes setear props complejas desde JS:
+
+```ts
+import type { DominicanRepublicMapElement } from "react-dominican-republic-map";
+
+const element = document.querySelector("dr-map") as DominicanRepublicMapElement | null;
+if (element) {
+  element.mapProps = {
+    markers: [{ id: "sdq", x: 450, y: 340, label: "Santo Domingo" }],
+  };
+}
+```
 
 ## Dataset exports
 

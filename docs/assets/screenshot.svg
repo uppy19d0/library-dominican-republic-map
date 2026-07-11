@@ -1,0 +1,42 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="112" y1="72" x2="1168" y2="648" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#1E293B"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="160" y1="120" x2="1120" y2="600" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FAFC"/>
+      <stop offset="1" stop-color="#E2E8F0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="#020617"/>
+  <rect x="112" y="72" width="1056" height="576" rx="28" fill="url(#bg)"/>
+  <rect x="160" y="120" width="960" height="480" rx="20" fill="url(#panel)"/>
+  <text x="208" y="176" fill="#0F172A" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">
+    react-dominican-republic-map
+  </text>
+  <text x="208" y="210" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="18">
+    Selección, choropleth, eventos y uso cross-framework (React/Vue/Svelte)
+  </text>
+
+  <g transform="translate(210 250)">
+    <path d="M67 97L114 68L166 74L210 62L246 83L300 76L355 107L388 160L366 220L324 256L263 271L206 256L163 274L111 261L82 218L42 190L27 146L67 97Z" fill="#BFDBFE" stroke="#1E3A8A" stroke-width="4"/>
+    <path d="M114 68L166 74L152 132L98 142L67 97L114 68Z" fill="#60A5FA" stroke="#1D4ED8" stroke-width="2"/>
+    <path d="M152 132L210 62L246 83L244 149L180 178L142 162L152 132Z" fill="#3B82F6" stroke="#1D4ED8" stroke-width="2"/>
+    <path d="M244 149L300 76L355 107L329 171L275 194L244 149Z" fill="#1D4ED8" stroke="#1E3A8A" stroke-width="2"/>
+    <path d="M180 178L244 149L275 194L258 252L206 256L163 274L148 224L180 178Z" fill="#2563EB" stroke="#1E3A8A" stroke-width="2"/>
+    <path d="M98 142L142 162L148 224L111 261L82 218L42 190L27 146L98 142Z" fill="#93C5FD" stroke="#1D4ED8" stroke-width="2"/>
+    <circle cx="286" cy="212" r="10" fill="#EF4444" stroke="#FFF" stroke-width="3"/>
+  </g>
+
+  <g transform="translate(740 260)">
+    <rect width="300" height="66" rx="12" fill="#0F172A"/>
+    <text x="20" y="30" fill="#F8FAFC" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">Santo Domingo</text>
+    <text x="20" y="52" fill="#CBD5E1" font-family="Segoe UI, Arial, sans-serif" font-size="14">onProvinceClick + selección</text>
+    <rect y="92" width="300" height="190" rx="14" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <text x="20" y="126" fill="#0F172A" font-family="Consolas, monospace" font-size="14">colors='{"selectedFill":"#2563eb"}'</text>
+    <text x="20" y="154" fill="#0F172A" font-family="Consolas, monospace" font-size="14">data='{"DO-01":{"value":200}}'</text>
+    <text x="20" y="182" fill="#0F172A" font-family="Consolas, monospace" font-size="14">on:provinceclick</text>
+    <text x="20" y="210" fill="#0F172A" font-family="Consolas, monospace" font-size="14">&lt;dr-map /&gt;</text>
+  </g>
+</svg>

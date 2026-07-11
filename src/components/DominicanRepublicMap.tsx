@@ -3,6 +3,7 @@ import {
   useId,
   useMemo,
   useState,
+  type CSSProperties,
   type KeyboardEvent,
   type MouseEvent,
   type PointerEvent as ReactPointerEvent,
@@ -39,11 +40,12 @@ export function DominicanRepublicMap({
   width = "100%",
   height,
   data,
-  defaultFill = DEFAULT_FILL,
-  defaultStroke = DEFAULT_STROKE,
-  hoverFill = HOVER_FILL,
-  selectedFill = SELECTED_FILL,
-  disabledFill = DISABLED_FILL,
+  defaultFill,
+  defaultStroke,
+  hoverFill,
+  selectedFill,
+  disabledFill,
+  colors,
   colorScale,
   valueMin,
   valueMax,
@@ -63,10 +65,12 @@ export function DominicanRepublicMap({
   onZoomChange,
   animated = true,
   onProvinceClick,
+  onProvinceDoubleClick,
   onProvinceEnter,
   onProvinceLeave,
   onSelectionChange,
   onMarkerClick,
+  onMapClick,
   getProvinceStyle,
 }: DominicanRepublicMapProps) {
   const reactId = useId();
@@ -97,6 +101,16 @@ export function DominicanRepublicMap({
     () => mergeZoomConfig(zoomConfig),
     [zoomConfig],
   );
+  const resolvedDefaultFill = defaultFill ?? colors?.defaultFill ?? DEFAULT_FILL;
+  const resolvedDefaultStroke =
+    defaultStroke ?? colors?.defaultStroke ?? DEFAULT_STROKE;
+  const resolvedHoverFill = hoverFill ?? colors?.hoverFill ?? HOVER_FILL;
+  const resolvedSelectedFill =
+    selectedFill ?? colors?.selectedFill ?? SELECTED_FILL;
+  const resolvedDisabledFill =
+    disabledFill ?? colors?.disabledFill ?? DISABLED_FILL;
+  const resolvedMarkerFill = colors?.markerFill ?? "#ef4444";
+  const resolvedMarkerStroke = colors?.markerStroke ?? "#fff";
 
   const { containerRef, zoom: zoomState, zoomBy, resetZoom, gestureHandlers } =
     useMapGestures({
@@ -159,6 +173,14 @@ export function DominicanRepublicMap({
   );
 
   const aspectRatio = `${MAP_WIDTH} / ${MAP_HEIGHT}`;
+  const containerStyle: CSSProperties & { "--rd-map-focus-stroke"?: string } = {
+    width,
+    height: height ?? undefined,
+    aspectRatio: height ? undefined : aspectRatio,
+    minHeight: height ? undefined : 280,
+    "--rd-map-focus-stroke": colors?.focusStroke ?? "#f59e0b",
+    ...style,
+  };
 
   return (
     <div
@@ -171,13 +193,7 @@ export function DominicanRepublicMap({
       ]
         .filter(Boolean)
         .join(" ")}
-      style={{
-        width,
-        height: height ?? undefined,
-        aspectRatio: height ? undefined : aspectRatio,
-        minHeight: height ? undefined : 280,
-        ...style,
-      }}
+      style={containerStyle}
       {...(enableZoom ? gestureHandlers : {})}
     >
       <svg
@@ -189,6 +205,11 @@ export function DominicanRepublicMap({
         style={{
           transform: `translate(${zoomState.x}px, ${zoomState.y}px) scale(${zoomState.scale})`,
           transformOrigin: "0 0",
+        }}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) {
+            onMapClick?.(event);
+          }
         }}
       >
         <title id={titleId}>{ariaLabel}</title>
@@ -211,15 +232,16 @@ export function DominicanRepublicMap({
                 data: provinceData,
                 domain,
                 colorScale: scale,
-                defaultFill,
+                defaultFill: resolvedDefaultFill,
                 hovered: isHovered,
                 selected: isSelected,
                 disabled,
-                hoverFill,
-                selectedFill,
-                disabledFill,
+                hoverFill: resolvedHoverFill,
+                selectedFill: resolvedSelectedFill,
+                disabledFill: resolvedDisabledFill,
               });
-            const stroke = custom?.stroke ?? provinceData?.stroke ?? defaultStroke;
+            const stroke =
+              custom?.stroke ?? provinceData?.stroke ?? resolvedDefaultStroke;
 
             return (
               <path
@@ -275,6 +297,14 @@ export function DominicanRepublicMap({
                 onClick={(event) => {
                   // Avoid treating map pan as click when zoomed; simple click still works.
                   handleProvinceActivate(province, event);
+                }}
+                onDoubleClick={(event) => {
+                  if (disabled) return;
+                  onProvinceDoubleClick?.({
+                    province,
+                    data: provinceData,
+                    nativeEvent: event,
+                  });
                 }}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
@@ -383,8 +413,8 @@ export function DominicanRepublicMap({
                     cx={marker.x}
                     cy={marker.y}
                     r={size}
-                    fill={marker.color ?? "#ef4444"}
-                    stroke="#fff"
+                    fill={marker.color ?? resolvedMarkerFill}
+                    stroke={resolvedMarkerStroke}
                     strokeWidth={1.5}
                   />
                   {marker.label ? (

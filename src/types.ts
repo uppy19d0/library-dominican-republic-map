@@ -64,6 +64,17 @@ export interface ProvinceStyle {
   className?: string;
 }
 
+export interface MapColors {
+  defaultFill?: string;
+  defaultStroke?: string;
+  hoverFill?: string;
+  selectedFill?: string;
+  disabledFill?: string;
+  markerFill?: string;
+  markerStroke?: string;
+  focusStroke?: string;
+}
+
 export interface ProvinceDataValue {
   value?: number | string | null;
   label?: ReactNode;
@@ -143,6 +154,8 @@ export interface DominicanRepublicMapProps {
   selectedFill?: string;
   /** Disabled fill override */
   disabledFill?: string;
+  /** Color palette overrides in one object */
+  colors?: MapColors;
   /** Choropleth color scale (low → high). Used when data values are numeric. */
   colorScale?: string[];
   /** Explicit min for choropleth domain */
@@ -181,6 +194,8 @@ export interface DominicanRepublicMapProps {
   animated?: boolean;
   /** Province click / tap / Enter */
   onProvinceClick?: (event: ProvinceEvent) => void;
+  /** Province double click / double tap */
+  onProvinceDoubleClick?: (event: ProvinceEvent) => void;
   /** Province pointer enter / focus */
   onProvinceEnter?: (event: ProvinceEvent) => void;
   /** Province pointer leave / blur */
@@ -189,6 +204,8 @@ export interface DominicanRepublicMapProps {
   onSelectionChange?: (selected: ProvinceId[]) => void;
   /** Marker click */
   onMarkerClick?: (event: MarkerEvent) => void;
+  /** Click in SVG background (outside provinces and markers) */
+  onMapClick?: (event: MouseEvent<SVGSVGElement>) => void;
   /** Custom style resolver per province */
   getProvinceStyle?: (province: Province, state: {
     hovered: boolean;

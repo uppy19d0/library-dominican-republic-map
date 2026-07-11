@@ -58,7 +58,7 @@
 }
 
 .rd-map__province:focus-visible {
-  stroke: #f59e0b;
+  stroke: var(--rd-map-focus-stroke, #f59e0b);
   stroke-width: 2;
   filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.8));
 }

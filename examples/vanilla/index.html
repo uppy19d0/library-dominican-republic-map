@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DR Map - Vanilla Web Component</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        background: #0f172a;
+        color: #f8fafc;
+      }
+      main {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+      dr-map {
+        display: block;
+        height: 560px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Vanilla JS + &lt;dr-map&gt;</h1>
+      <dr-map
+        show-labels
+        selection-mode="multiple"
+        colors='{"defaultFill":"#dbeafe","selectedFill":"#1d4ed8","markerFill":"#dc2626"}'
+      ></dr-map>
+      <p id="last-event">Último evento: —</p>
+    </main>
+
+    <script type="module">
+      import "react-dominican-republic-map/element";
+      import "react-dominican-republic-map/styles.css";
+
+      const map = document.querySelector("dr-map");
+      const lastEvent = document.querySelector("#last-event");
+
+      map?.addEventListener("provinceclick", (event) => {
+        lastEvent.textContent = `Último evento: ${event.detail.province.name}`;
+      });
+    </script>
+  </body>
+</html>

@@ -1,5 +1,13 @@
 export { DominicanRepublicMap } from "./components/DominicanRepublicMap";
 export {
+  DominicanRepublicMapElement,
+  registerDominicanRepublicMapElement,
+} from "./web-component";
+export type {
+  DominicanRepublicMapElementEventMap,
+  DominicanRepublicMapElementProps,
+} from "./web-component";
+export {
   findProvinceByName,
   getProvince,
   getProvincesByRegion,
@@ -27,6 +35,7 @@ export {
 export type {
   DominicanRepublicMapProps,
   MapMarker,
+  MapColors,
   MarkerEvent,
   Province,
   ProvinceData,
