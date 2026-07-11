@@ -3,72 +3,76 @@
 [![CI](https://github.com/uppy19d0/library-dominican-republic-map/actions/workflows/ci.yml/badge.svg)](https://github.com/uppy19d0/library-dominican-republic-map/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-Mapa SVG interactivo y táctil de la **República Dominicana**. Incluye las 32 provincias, selección, choropleth, marcadores, zoom/pan con rueda y pellizco, tooltips, teclado y estilos listos para producción.
+Language: English | [Espanol](./README.es.md)
 
-Creado por [Luis Aneuris Tavarez De Jesus](https://www.ltavarez.me/).
+Interactive, touch-friendly SVG map of the **Dominican Republic**. It includes all 32 provinces, selection, choropleth colors, markers, wheel and pinch zoom, pan, tooltips, keyboard support, popups, and production-ready styles.
+
+Created by [Luis Aneuris Tavarez De Jesus](https://www.ltavarez.me/).
 
 ## Screenshot
 
 [![Open the interactive dominican-republic-map preview](./docs/assets/screenshot.svg)](https://raw.githack.com/uppy19d0/library-dominican-republic-map/gh-pages/docs/demo/index.html)
 
-## Interactive preview
+## Interactive Preview
 
-El README de GitHub y npm no permite ejecutar JavaScript embebido, por eso la imagen de arriba abre un demo externo con eventos, choropleth, colores, marcadores, iconos y popups.
+GitHub and npm READMEs cannot run embedded JavaScript, so the screenshot opens an external interactive preview with events, choropleth data, custom colors, markers, icons, and popups.
 
 [Open interactive preview](https://raw.githack.com/uppy19d0/library-dominican-republic-map/gh-pages/docs/demo/index.html) · [GitHub Pages URL](https://uppy19d0.github.io/library-dominican-republic-map/docs/demo/) · [View demo source](./docs/demo/index.html)
 
 ## Features
 
-- 32 provincias con paths SVG embebidos (sin dependencias de mapas externas)
-- Interacción mouse + touch: tap, hover, long focus, pinch-zoom, pan, double-tap zoom
-- Selección simple o múltiple (controlada o no controlada)
-- Choropleth por valores numéricos con escala de color interpolada
-- Colores globales, por provincia y por estado (`hover`, `selected`, `disabled`)
-- Marcadores con iconos built-in: pin, carro, pickup, camión, personas, edificios, hospitales, escuelas, seguridad y alerta
-- Popups nativos al click/tap para provincias y marcadores
-- Tooltips nativos o render propio
-- Labels de abreviatura opcionales
-- Accesible: `role="button"`, teclado Enter/Espacio, `aria-*`
-- TypeScript completo
-- CSS con variables para theming
-- Paleta de colores unificada con prop `colors`
-- Zero runtime dependencies (solo peer `react` / `react-dom`)
-- Soporte cross-framework con Web Component (`<dr-map>`) para React, Vue, Svelte, etc.
+- 32 Dominican Republic provinces with embedded SVG paths
+- Mouse, touch, and keyboard interactions
+- Single, multiple, controlled, and uncontrolled selection
+- Choropleth colors from numeric province data
+- Global colors, per-province colors, and per-state colors
+- Built-in marker icons: pin, car, pickup, truck, people, building, hospital, school, shield, warning
+- Native click/tap popups for provinces and markers
+- Native tooltips or custom renderers
+- Optional province abbreviation labels
+- Accessible province buttons with `aria-*`, Enter, and Space support
+- Full TypeScript types
+- CSS variables for theming
+- React API plus Web Component API for Vue, Svelte, Angular, and vanilla JavaScript
 
 ## Installation
+
+React:
 
 ```bash
 npm install dominican-republic-map
 ```
 
-Para Vue, Svelte, Angular o Vanilla JS instala tambien los peer dependencies:
+Vue, Svelte, Angular, or vanilla JavaScript:
 
 ```bash
 npm install react react-dom dominican-republic-map
 ```
 
-## Framework support
+`react` and `react-dom` are peer dependencies because the Web Component uses React internally.
 
-- React: usa `DominicanRepublicMap`
-- Vue / Svelte / Angular / Vanilla JS: usa `<dr-map>` (Web Component estándar)
-- Guia de inicio: [docs/getting-started.md](./docs/getting-started.md)
-- Guías por framework: [docs/frameworks](./docs/frameworks/README.md)
-- Recetas de uso de la API: [docs/recipes.md](./docs/recipes.md)
-- Preview interactivo: [live demo](https://raw.githack.com/uppy19d0/library-dominican-republic-map/gh-pages/docs/demo/index.html)
-- Código del showcase: [docs/demo](./docs/demo/index.html)
-- Release automation: [docs/release.md](./docs/release.md)
+## Framework Support
 
-## Pick the right API
-
-| Proyecto | Usa | Ideal para |
+| Project | Use | Best for |
 | --- | --- | --- |
-| React | `DominicanRepublicMap` | Props tipadas, render custom, callbacks React |
-| Vue | `<dr-map>` | Templates, eventos DOM, props complejas con `mapProps` |
-| Svelte | `<dr-map>` | Atributos JSON, eventos DOM, integracion simple |
-| Angular | `<dr-map>` | Custom Elements con `CUSTOM_ELEMENTS_SCHEMA` |
-| HTML / Vanilla | `<dr-map>` | Demos estaticas, dashboards simples, CMS |
+| React | `DominicanRepublicMap` | Typed props, custom renderers, React callbacks |
+| Vue | `<dr-map>` | Templates, DOM events, complex props through `mapProps` |
+| Svelte | `<dr-map>` | JSON attributes, DOM events, simple integration |
+| Angular | `<dr-map>` | Custom Elements with `CUSTOM_ELEMENTS_SCHEMA` |
+| HTML / Vanilla JS | `<dr-map>` | Static demos, dashboards, CMS pages |
 
-## Quick Start
+Useful links:
+
+- [Getting started](./docs/getting-started.md)
+- [Framework guides](./docs/frameworks/README.md)
+- [API reference](./docs/api.md)
+- [API recipes](./docs/recipes.md)
+- [Theming](./docs/theming.md)
+- [Touch and zoom](./docs/gestures.md)
+- [Interactive demo source](./docs/demo/index.html)
+- [Release automation](./docs/release.md)
+
+## Quick Start: React
 
 ```tsx
 import { DominicanRepublicMap } from "dominican-republic-map";
@@ -78,11 +82,24 @@ export function App() {
   return (
     <DominicanRepublicMap
       showLabels
+      showPopup
       enableZoom
       data={{
-        "DO-01": { value: 120, label: "120 proyectos" },
-        "DO-25": { value: 80, label: "80 proyectos" },
-        "DO-32": { value: 200, label: "200 proyectos" },
+        "DO-01": {
+          value: 120,
+          label: "120 projects",
+          popup: "Main service center",
+        },
+        "DO-25": {
+          value: 80,
+          label: "80 projects",
+          popup: "Northern regional operations",
+        },
+        "DO-32": {
+          value: 200,
+          label: "200 projects",
+          popup: "Metropolitan follow-up",
+        },
       }}
       onProvinceClick={({ province }) => {
         console.log(province.name, province.region);
@@ -92,31 +109,123 @@ export function App() {
 }
 ```
 
-## Props
+## Quick Start: Web Component
+
+Use this mode for Vue, Svelte, Angular, and vanilla JavaScript.
+
+```ts
+import "dominican-republic-map/element";
+import "dominican-republic-map/styles.css";
+```
+
+```html
+<dr-map
+  show-labels
+  show-popup
+  selection-mode="multiple"
+  colors='{"defaultFill":"#dbeafe","selectedFill":"#1d4ed8"}'
+  data='{"DO-01":{"fill":"#eef2ff","selectedFill":"#be123c","popup":"Administrative office"}}'
+  markers='[{"id":"pickup-sti","x":237.91,"y":135.92,"label":"Field team","icon":"pickup","color":"#f59e0b","popup":"Response team in the field","provinceId":"DO-25"}]'
+></dr-map>
+```
+
+DOM events:
+
+```ts
+const map = document.querySelector("dr-map");
+
+map?.addEventListener("provinceclick", (event) => {
+  console.log(event.detail.province.id);
+});
+
+map?.addEventListener("popupopen", (event) => {
+  console.log(event.detail.type);
+});
+```
+
+For large objects or functions, set complex props from JavaScript:
+
+```ts
+const map = document.querySelector("dr-map");
+
+map.mapProps = {
+  showPopup: true,
+  selectionMode: "multiple",
+  data: {
+    "DO-01": { value: 120, popup: "Administrative office" },
+  },
+  getProvinceStyle: (province) =>
+    province.region === "Cibao Norte" ? { fill: "#205a86" } : undefined,
+};
+```
+
+## Angular
+
+Angular support uses the standard Web Component.
+
+```bash
+npm install react react-dom dominican-republic-map
+```
+
+Register the element and styles once:
+
+```ts
+// src/main.ts
+import "dominican-republic-map/element";
+import "dominican-republic-map/styles.css";
+```
+
+Standalone component:
+
+```ts
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+
+@Component({
+  selector: "app-root",
+  standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  template: `
+    <dr-map
+      show-labels
+      show-popup
+      selection-mode="multiple"
+      (provinceclick)="onProvinceClick($event)"
+    ></dr-map>
+  `,
+})
+export class AppComponent {
+  onProvinceClick(event: Event) {
+    const customEvent = event as CustomEvent<{ province: { id: string } }>;
+    console.log(customEvent.detail.province.id);
+  }
+}
+```
+
+NgModule apps can add `CUSTOM_ELEMENTS_SCHEMA` to the module instead. See [docs/frameworks/angular.md](./docs/frameworks/angular.md).
+
+## Common Props
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `data` | `ProvinceData` | — | Valores / estilos por provincia |
-| `selectionMode` | `"none" \| "single" \| "multiple"` | `"single"` | Modo de selección |
-| `selectedProvinces` | `ProvinceId[]` | — | Selección controlada |
-| `enableZoom` | `boolean` | `true` | Zoom rueda / pellizco / pan |
-| `showZoomControls` | `boolean` | `true` | Botones + / − / reset |
-| `showLabels` | `boolean` | `false` | Abreviaturas en el mapa |
-| `showTooltip` | `boolean` | `true` | Tooltip al hover/focus |
-| `showPopup` | `boolean` | `false` | Popup al click/tap |
-| `renderPopup` | `(target) => ReactNode` | — | Popup custom en React |
-| `colors` | `MapColors` | — | Paleta unificada (`defaultFill`, `selectedFill`, etc.) |
-| `colorScale` | `string[]` | blues | Escala choropleth |
-| `markers` | `MapMarker[]` | `[]` | Puntos/iconos sobre el mapa |
-| `onProvinceClick` | `(e) => void` | — | Click / tap / Enter |
-| `onProvinceDoubleClick` | `(e) => void` | — | Doble click / doble tap |
-| `onSelectionChange` | `(ids) => void` | — | Cambio de selección |
-| `onMapClick` | `(e) => void` | — | Click en el fondo del SVG |
-| `getProvinceStyle` | `(province, state) => style` | — | Estilo custom por provincia |
+| `data` | `ProvinceData` | - | Values and styles per province |
+| `selectionMode` | `"none" \| "single" \| "multiple"` | `"single"` | Selection behavior |
+| `selectedProvinces` | `ProvinceId[]` | - | Controlled selected provinces |
+| `enableZoom` | `boolean` | `true` | Wheel, pinch, and pan zoom |
+| `showZoomControls` | `boolean` | `true` | Plus, minus, and reset buttons |
+| `showLabels` | `boolean` | `false` | Province abbreviation labels |
+| `showTooltip` | `boolean` | `true` | Hover/focus tooltip |
+| `showPopup` | `boolean` | `false` | Click/tap popup |
+| `renderPopup` | `(target) => ReactNode` | - | Custom popup renderer in React |
+| `colors` | `MapColors` | - | Unified palette |
+| `colorScale` | `string[]` | blue scale | Choropleth color scale |
+| `markers` | `MapMarker[]` | `[]` | Marker points/icons over the map |
+| `onProvinceClick` | `(event) => void` | - | Province click/tap/Enter |
+| `onSelectionChange` | `(ids) => void` | - | Selection changes |
+| `getProvinceStyle` | `(province, state) => style` | - | Custom province style |
 
-Ver [docs/api.md](./docs/api.md) para la API completa.
+See [docs/api.md](./docs/api.md) for the complete API.
 
-## Data helpers
+## Data Helpers
 
 ```ts
 import {
@@ -134,162 +243,21 @@ getProvincesByRegion("Cibao Norte");
 
 ## Examples
 
-Ejemplos completos: [examples/README.md](./examples/README.md)
-
-### Formas de usar la API
-
-| Caso | API principal |
-| --- | --- |
-| Mapa basico | `showLabels`, `enableZoom` |
-| Seleccion | `selectionMode`, `selectedProvinces`, `onSelectionChange` |
-| Choropleth | `data[id].value`, `colorScale`, `valueMin`, `valueMax` |
-| Color global | `colors.defaultFill`, `colors.selectedFill`, `colors.markerFill` |
-| Color por provincia | `data[id].fill`, `data[id].hoverFill`, `data[id].selectedFill` |
-| Iconos | `markers[].icon` |
-| Popups | `showPopup`, `data[id].popup`, `markers[].popup`, `renderPopup` |
-| Web Component dinamico | `element.mapProps = { ... }` |
-
-Ver la guia completa en [docs/recipes.md](./docs/recipes.md).
-
-### React (componente)
-
-```tsx
-import { DominicanRepublicMap } from "dominican-republic-map";
-import "dominican-republic-map/styles.css";
-
-<DominicanRepublicMap
-  showPopup
-  colors={{
-    defaultFill: "#dbeafe",
-    selectedFill: "#1d4ed8",
-    markerFill: "#dc2626",
-  }}
-  data={{
-    "DO-01": {
-      fill: "#eef2ff",
-      selectedFill: "#be123c",
-      popup: "Sede administrativa y servicios digitales",
-    },
-    "DO-25": {
-      value: 80,
-      selectedFill: "#047857",
-      popup: "Operaciones regionales",
-    },
-  }}
-  markers={[
-    {
-      id: "ambulance-sdq",
-      x: 444.68,
-      y: 328.42,
-      label: "Unidad médica",
-      icon: "hospital",
-      color: "#dc2626",
-      popup: "Hospital móvil disponible",
-      provinceId: "DO-01",
-    },
-    {
-      id: "pickup-sti",
-      x: 237.91,
-      y: 135.92,
-      label: "Brigada",
-      icon: "pickup",
-      color: "#f59e0b",
-      popup: "Equipo de respuesta en campo",
-      provinceId: "DO-25",
-    },
-  ]}
-  onProvinceClick={({ province }) => console.log("React:", province.id)}
-/>;
-```
-
-### Vue / Svelte / Angular / otros (Web Component)
-
-```ts
-import "dominican-republic-map/element";
-import "dominican-republic-map/styles.css";
-```
-
-> Nota: esta librería usa React internamente, así que en Vue/Svelte también debes tener instalados `react` y `react-dom` (peer dependencies).
-
-```html
-<dr-map
-  show-labels
-  show-popup
-  selection-mode="multiple"
-  colors='{"defaultFill":"#dbeafe","selectedFill":"#1d4ed8"}'
-  data='{"DO-01":{"fill":"#eef2ff","selectedFill":"#be123c","popup":"Sede administrativa"}}'
-  markers='[{"id":"pickup-sti","x":237.91,"y":135.92,"label":"Brigada","icon":"pickup","color":"#f59e0b","popup":"Equipo en campo","provinceId":"DO-25"}]'
-></dr-map>
-```
-
-Eventos DOM:
-
-```ts
-const map = document.querySelector("dr-map");
-map?.addEventListener("provinceclick", (event) => {
-  console.log("Web component:", event.detail.province.id);
-});
-```
-
-### Angular quick use
-
-```ts
-// main.ts
-import "dominican-republic-map/element";
-import "dominican-republic-map/styles.css";
-```
-
-```ts
-// app.module.ts
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
-
-@NgModule({
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-})
-export class AppModule {}
-```
-
-```html
-<dr-map show-labels selection-mode="single"></dr-map>
-```
-
-### Vue / Svelte / Vanilla (runnable)
-
-```bash
-npm --prefix examples/vue install && npm run example:vue
-npm --prefix examples/svelte install && npm run example:svelte
-npm --prefix examples/vanilla install && npm run example:vanilla
-```
-
-### HTML standalone (sin build)
-
-```bash
-npm run demo
-# o
-npx serve examples/standalone
-```
-
-Archivo: [`examples/standalone/index.html`](./examples/standalone/index.html)  
-También en [`docs/demo/index.html`](./docs/demo/index.html).
-
-> `examples/basic/index.html` es un entry de **Vite + React**. No funciona abriéndolo como `file://`; usa el comando de abajo.
-
-### Example React (Vite)
-
 ```bash
 npm install
-npm run example
+npm run example:react
+npm run example:vue
+npm run example:svelte
+npm run example:vanilla
 ```
 
-El example en `examples/basic` muestra choropleth, selección múltiple, marcadores y zoom táctil.
+Example folders:
 
-## Docs
-
-- [API](./docs/api.md)
-- [API recipes](./docs/recipes.md)
-- [Theming](./docs/theming.md)
-- [Touch & zoom](./docs/gestures.md)
-- [Framework guides](./docs/frameworks/README.md)
+- [React + Vite](./examples/basic)
+- [Vue](./examples/vue)
+- [Svelte](./examples/svelte)
+- [Vanilla JS](./examples/vanilla)
+- [Angular guide](./examples/angular)
 
 ## License
 
