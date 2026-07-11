@@ -1,6 +1,6 @@
 # dominican-republic-map
 
-[![CI](https://github.com/uppy19d0/react-dominican-republic-map/actions/workflows/ci.yml/badge.svg)](https://github.com/uppy19d0/react-dominican-republic-map/actions/workflows/ci.yml)
+[![CI](https://github.com/uppy19d0/library-dominican-republic-map/actions/workflows/ci.yml/badge.svg)](https://github.com/uppy19d0/library-dominican-republic-map/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
 Mapa SVG interactivo y táctil de la **República Dominicana**. Incluye las 32 provincias, selección, choropleth, marcadores, zoom/pan con rueda y pellizco, tooltips, teclado y estilos listos para producción.
@@ -38,6 +38,8 @@ npm install dominican-republic-map
 - React: usa `DominicanRepublicMap`
 - Vue / Svelte / Angular / Vanilla JS: usa `<dr-map>` (Web Component estándar)
 - Guías por framework: [docs/frameworks](./docs/frameworks/README.md)
+- Showcase de demos: [docs/demo](./docs/demo/index.html)
+- Release automation: [docs/release.md](./docs/release.md)
 
 ## Quick Start
 

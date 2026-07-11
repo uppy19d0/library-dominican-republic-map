@@ -1,6 +1,6 @@
 {
   "name": "dominican-republic-map",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Interactive, touch-friendly Dominican Republic SVG map for React and Web Components (Vue, Svelte, Angular, vanilla).",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -83,13 +83,13 @@
     "name": "Luis Aneuris Tavarez De Jesus",
     "url": "https://www.ltavarez.me/"
   },
-  "homepage": "https://github.com/uppy19d0/react-dominican-republic-map#readme",
+  "homepage": "https://github.com/uppy19d0/library-dominican-republic-map#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/uppy19d0/react-dominican-republic-map.git"
+    "url": "git+https://github.com/uppy19d0/library-dominican-republic-map.git"
   },
   "bugs": {
-    "url": "https://github.com/uppy19d0/react-dominican-republic-map/issues"
+    "url": "https://github.com/uppy19d0/library-dominican-republic-map/issues"
   },
   "license": "MIT",
   "engines": {
