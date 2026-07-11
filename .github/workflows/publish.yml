@@ -27,7 +27,6 @@ jobs:
         with:
           node-version: 22.14.0
           registry-url: https://registry.npmjs.org
-          cache: npm
 
       - name: Use npm 11
         run: npm install -g "npm@^11.5.1"
@@ -52,12 +51,5 @@ jobs:
       - name: Preview npm package
         run: npm pack --dry-run
 
-      - name: Verify npm token
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: test -n "$NODE_AUTH_TOKEN"
-
       - name: Publish to npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public --provenance
+        run: npm publish --access public
