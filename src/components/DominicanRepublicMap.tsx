@@ -13,11 +13,14 @@ import {
   MAP_NAME_ES,
   MAP_VIEW_BOX,
   MAP_WIDTH,
+  PROVINCE_BY_ID,
   PROVINCES,
 } from "../data";
 import { mergeZoomConfig, useMapGestures } from "../hooks/useMapGestures";
 import type {
   DominicanRepublicMapProps,
+  MapMarker,
+  MapPopupTarget,
   Province,
   ProvinceId,
 } from "../types";
@@ -32,6 +35,176 @@ const DEFAULT_STROKE = "#0f172a";
 const HOVER_FILL = "#60a5fa";
 const SELECTED_FILL = "#2563eb";
 const DISABLED_FILL = "#e2e8f0";
+
+function isPointerLikeEvent(
+  event: ReactPointerEvent | KeyboardEvent | MouseEvent,
+): event is ReactPointerEvent | MouseEvent {
+  return "clientX" in event && "clientY" in event;
+}
+
+function DefaultPopupContent({ target }: { target: MapPopupTarget }) {
+  if (target.type === "marker") {
+    const title = target.marker.popupTitle ?? target.marker.label ?? target.marker.id;
+
+    return (
+      <>
+        <strong>{title}</strong>
+        {target.province ? (
+          <span>{target.province.name}</span>
+        ) : null}
+        {target.marker.popup ? (
+          <span>{target.marker.popup}</span>
+        ) : target.marker.label ? (
+          <span>{target.marker.label}</span>
+        ) : null}
+      </>
+    );
+  }
+
+  const title = target.data?.popupTitle ?? target.province.name;
+
+  return (
+    <>
+      <strong>{title}</strong>
+      <span>{target.province.region}</span>
+      {target.data?.popup ? (
+        <span>{target.data.popup}</span>
+      ) : target.data?.label ? (
+        <span>{target.data.label}</span>
+      ) : typeof target.data?.value !== "undefined" ? (
+        <span>{String(target.data.value)}</span>
+      ) : (
+        <span>{target.province.capital}</span>
+      )}
+    </>
+  );
+}
+
+function BuiltInMarkerIcon({
+  marker,
+  fill,
+  stroke,
+}: {
+  marker: MapMarker;
+  fill: string;
+  stroke: string;
+}) {
+  const icon = marker.icon ?? "dot";
+  const scale = (marker.size ?? 7) / 12;
+
+  return (
+    <g className="rd-map__marker-icon" transform={`scale(${scale})`}>
+      {icon === "pin" ? (
+        <>
+          <path
+            d="M0 -15C-7.7 -15 -14 -8.7 -14 -1c0 10.2 14 21 14 21S14 9.2 14 -1C14 -8.7 7.7 -15 0 -15Z"
+            fill={fill}
+            stroke={stroke}
+            strokeWidth={2}
+          />
+          <circle cx={0} cy={-1} r={4.4} fill={stroke} opacity={0.95} />
+        </>
+      ) : icon === "car" ? (
+        <>
+          <path
+            d="M-16 0h3.3l3-7.5H8.8L12.5 0H16v8H-16V0Z"
+            fill={fill}
+            stroke={stroke}
+            strokeLinejoin="round"
+            strokeWidth={2}
+          />
+          <path d="M-7 -5h5v5h-7l2-5Zm7 0h7l2.3 5H0v-5Z" fill={stroke} opacity={0.9} />
+          <circle cx={-9} cy={8} r={3.1} fill={stroke} />
+          <circle cx={9} cy={8} r={3.1} fill={stroke} />
+        </>
+      ) : icon === "pickup" || icon === "truck" ? (
+        <>
+          <path
+            d="M-17 -6H2v13h-19V-6Zm19 3h8l7 7v3H2V-3Z"
+            fill={fill}
+            stroke={stroke}
+            strokeLinejoin="round"
+            strokeWidth={2}
+          />
+          <path d="M5 -1h4l3.8 4H5v-4Z" fill={stroke} opacity={0.9} />
+          <circle cx={-10} cy={8} r={3.1} fill={stroke} />
+          <circle cx={10} cy={8} r={3.1} fill={stroke} />
+        </>
+      ) : icon === "people" ? (
+        <>
+          <circle cx={-7} cy={-7} r={4.6} fill={fill} stroke={stroke} strokeWidth={2} />
+          <circle cx={8} cy={-6} r={4.1} fill={fill} stroke={stroke} strokeWidth={2} />
+          <path
+            d="M-16 10c1.4-7.3 5-10.8 9-10.8S0.7 2.7 2 10H-16Zm0 0h31c-1.1-6.2-3.9-9.2-7.2-9.2-2.4 0-4.5 1.5-5.8 4.5"
+            fill={fill}
+            stroke={stroke}
+            strokeLinejoin="round"
+            strokeWidth={2}
+          />
+        </>
+      ) : icon === "building" || icon === "school" ? (
+        <>
+          {icon === "school" ? (
+            <path d="M-16 -7L0 -15 16 -7" fill="none" stroke={stroke} strokeLinejoin="round" strokeWidth={2.2} />
+          ) : null}
+          <rect
+            x={-13}
+            y={-10}
+            width={26}
+            height={24}
+            rx={2}
+            fill={fill}
+            stroke={stroke}
+            strokeWidth={2}
+          />
+          <path d="M-7 -4h4v4h-4v-4Zm10 0h4v4H3v-4ZM-7 6h4v4h-4V6Zm10 0h4v4H3V6Z" fill={stroke} opacity={0.85} />
+        </>
+      ) : icon === "hospital" ? (
+        <>
+          <rect
+            x={-13}
+            y={-13}
+            width={26}
+            height={26}
+            rx={4}
+            fill={fill}
+            stroke={stroke}
+            strokeWidth={2}
+          />
+          <path d="M-2 -8h4v6h6v4H2v6h-4V2h-6v-4h6v-6Z" fill={stroke} />
+        </>
+      ) : icon === "shield" ? (
+        <path
+          d="M0 -15 13 -10v8c0 8-5.1 14.2-13 18C-7.9 12.2-13 6-13-2v-8L0-15Z"
+          fill={fill}
+          stroke={stroke}
+          strokeLinejoin="round"
+          strokeWidth={2}
+        />
+      ) : icon === "warning" ? (
+        <>
+          <path
+            d="M0 -15 16 13h-32L0-15Z"
+            fill={fill}
+            stroke={stroke}
+            strokeLinejoin="round"
+            strokeWidth={2}
+          />
+          <path d="M-1.5 -5h3v9h-3v-9Zm0 12h3v3h-3V7Z" fill={stroke} />
+        </>
+      ) : (
+        <circle
+          cx={0}
+          cy={0}
+          r={12}
+          fill={fill}
+          stroke={stroke}
+          strokeWidth={2.5}
+        />
+      )}
+    </g>
+  );
+}
 
 export function DominicanRepublicMap({
   className,
@@ -56,6 +229,9 @@ export function DominicanRepublicMap({
   showLabels = false,
   showTooltip = true,
   renderTooltip,
+  showPopup = false,
+  closePopupOnMapClick = true,
+  renderPopup,
   markers = [],
   renderMarker,
   enableZoom = true,
@@ -71,6 +247,8 @@ export function DominicanRepublicMap({
   onSelectionChange,
   onMarkerClick,
   onMapClick,
+  onPopupOpen,
+  onPopupClose,
   getProvinceStyle,
 }: DominicanRepublicMapProps) {
   const reactId = useId();
@@ -78,6 +256,11 @@ export function DominicanRepublicMap({
   const [hoveredId, setHoveredId] = useState<ProvinceId | null>(null);
   const [tooltip, setTooltip] = useState<{
     province: Province;
+    x: number;
+    y: number;
+  } | null>(null);
+  const [popup, setPopup] = useState<{
+    target: MapPopupTarget;
     x: number;
     y: number;
   } | null>(null);
@@ -120,6 +303,51 @@ export function DominicanRepublicMap({
       onZoomChange,
     });
 
+  const mapPointToContainerPoint = useCallback(
+    (x: number, y: number) => {
+      const el = containerRef.current;
+      if (!el) return { x: 0, y: 0 };
+      const rect = el.getBoundingClientRect();
+
+      return {
+        x: (x / MAP_WIDTH) * rect.width * zoomState.scale + zoomState.x,
+        y: (y / MAP_HEIGHT) * rect.height * zoomState.scale + zoomState.y,
+      };
+    },
+    [containerRef, zoomState.scale, zoomState.x, zoomState.y],
+  );
+
+  const closePopup = useCallback(() => {
+    setPopup((current) => {
+      if (current) onPopupClose?.();
+      return null;
+    });
+  }, [onPopupClose]);
+
+  const openPopup = useCallback(
+    (
+      target: MapPopupTarget,
+      nativeEvent: ReactPointerEvent | KeyboardEvent | MouseEvent,
+      fallbackX: number,
+      fallbackY: number,
+    ) => {
+      if (!showPopup) return;
+      const el = containerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const point = isPointerLikeEvent(nativeEvent)
+        ? {
+            x: nativeEvent.clientX - rect.left,
+            y: nativeEvent.clientY - rect.top,
+          }
+        : mapPointToContainerPoint(fallbackX, fallbackY);
+
+      setPopup({ target, ...point });
+      onPopupOpen?.(target);
+    },
+    [containerRef, mapPointToContainerPoint, onPopupOpen, showPopup],
+  );
+
   const setSelected = useCallback(
     (next: ProvinceId[]) => {
       if (!selectedProvinces) setUncontrolledSelected(next);
@@ -156,6 +384,17 @@ export function DominicanRepublicMap({
         setSelected(toggleSelection(selected, province.id, selectionMode));
       }
 
+      openPopup(
+        {
+          type: "province",
+          province,
+          data: provinceData,
+        },
+        nativeEvent,
+        province.labelX,
+        province.labelY,
+      );
+
       onProvinceClick?.({
         province,
         data: provinceData,
@@ -166,10 +405,36 @@ export function DominicanRepublicMap({
       data,
       disabledSet,
       onProvinceClick,
+      openPopup,
       selected,
       selectionMode,
       setSelected,
     ],
+  );
+
+  const handleMarkerActivate = useCallback(
+    (
+      marker: MapMarker,
+      nativeEvent: ReactPointerEvent | KeyboardEvent | MouseEvent,
+    ) => {
+      const province = marker.provinceId
+        ? PROVINCE_BY_ID[marker.provinceId]
+        : undefined;
+
+      openPopup(
+        {
+          type: "marker",
+          marker,
+          province,
+        },
+        nativeEvent,
+        marker.x,
+        marker.y,
+      );
+
+      onMarkerClick?.({ marker, nativeEvent });
+    },
+    [onMarkerClick, openPopup],
   );
 
   const aspectRatio = `${MAP_WIDTH} / ${MAP_HEIGHT}`;
@@ -208,6 +473,7 @@ export function DominicanRepublicMap({
         }}
         onClick={(event) => {
           if (event.target === event.currentTarget) {
+            if (closePopupOnMapClick) closePopup();
             onMapClick?.(event);
           }
         }}
@@ -368,6 +634,7 @@ export function DominicanRepublicMap({
         {markers.length > 0 ? (
           <g className="rd-map__markers">
             {markers.map((marker) => {
+              const markerLabel = marker.label ?? marker.id;
               if (renderMarker) {
                 return (
                   <g
@@ -376,14 +643,14 @@ export function DominicanRepublicMap({
                     className="rd-map__marker"
                     role="button"
                     tabIndex={0}
-                    aria-label={marker.label ?? marker.id}
+                    aria-label={markerLabel}
                     onClick={(event) =>
-                      onMarkerClick?.({ marker, nativeEvent: event })
+                      handleMarkerActivate(marker, event)
                     }
                     onKeyDown={(event) => {
                       if (event.key === "Enter" || event.key === " ") {
                         event.preventDefault();
-                        onMarkerClick?.({ marker, nativeEvent: event });
+                        handleMarkerActivate(marker, event);
                       }
                     }}
                   >
@@ -395,27 +662,25 @@ export function DominicanRepublicMap({
               return (
                 <g
                   key={marker.id}
+                  transform={`translate(${marker.x} ${marker.y})`}
                   className="rd-map__marker"
                   role="button"
                   tabIndex={0}
-                  aria-label={marker.label ?? marker.id}
+                  aria-label={markerLabel}
                   onClick={(event) =>
-                    onMarkerClick?.({ marker, nativeEvent: event })
+                    handleMarkerActivate(marker, event)
                   }
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") {
                       event.preventDefault();
-                      onMarkerClick?.({ marker, nativeEvent: event });
+                      handleMarkerActivate(marker, event);
                     }
                   }}
                 >
-                  <circle
-                    cx={marker.x}
-                    cy={marker.y}
-                    r={size}
+                  <BuiltInMarkerIcon
+                    marker={{ ...marker, size }}
                     fill={marker.color ?? resolvedMarkerFill}
                     stroke={resolvedMarkerStroke}
-                    strokeWidth={1.5}
                   />
                   {marker.label ? (
                     <title>{marker.label}</title>
@@ -450,7 +715,37 @@ export function DominicanRepublicMap({
                   <span>{tooltip.province.capital}</span>
                 )}
               </>
+          )}
+        </div>
+      ) : null}
+
+      {showPopup && popup ? (
+        <div
+          className="rd-map__popup"
+          style={{
+            left: popup.x,
+            top: popup.y,
+          }}
+          role="dialog"
+          aria-live="polite"
+          onClick={(event) => event.stopPropagation()}
+          onPointerDown={(event) => event.stopPropagation()}
+        >
+          <button
+            type="button"
+            className="rd-map__popup-close"
+            aria-label="Cerrar popup"
+            onClick={closePopup}
+          >
+            ×
+          </button>
+          <div className="rd-map__popup-content">
+            {renderPopup ? (
+              renderPopup(popup.target)
+            ) : (
+              <DefaultPopupContent target={popup.target} />
             )}
+          </div>
         </div>
       ) : null}
 

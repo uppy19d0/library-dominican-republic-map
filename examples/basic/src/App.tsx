@@ -2,19 +2,32 @@ import { useMemo, useState } from "react";
 import {
   DominicanRepublicMap,
   PROVINCES,
+  type ProvinceData,
   type ProvinceId,
 } from "dominican-republic-map";
 import "dominican-republic-map/styles.css";
 
 function buildDemoData() {
-  const data: Record<string, { value: number; label: string }> = {};
+  const data: ProvinceData = {};
   for (const province of PROVINCES) {
     const value = Math.round(20 + Math.random() * 180);
     data[province.id] = {
       value,
       label: `${value} puntos`,
+      popup: `${value} puntos registrados en ${province.name}`,
     };
   }
+  data["DO-01"] = {
+    ...data["DO-01"],
+    fill: "#eef2ff",
+    selectedFill: "#be123c",
+    popup: "Sede administrativa y servicios digitales",
+  };
+  data["DO-25"] = {
+    ...data["DO-25"],
+    selectedFill: "#047857",
+    popup: "Operaciones regionales y brigadas activas",
+  };
   return data;
 }
 
@@ -39,6 +52,7 @@ export function App() {
           className="demo-map"
           height="100%"
           showLabels
+          showPopup
           enableZoom
           selectionMode="multiple"
           selectedProvinces={selected}
@@ -51,7 +65,9 @@ export function App() {
               x: 444.68,
               y: 328.42,
               label: "Distrito Nacional",
+              icon: "hospital",
               color: "#ef4444",
+              popup: "Unidad médica disponible",
               provinceId: "DO-01",
             },
             {
@@ -59,8 +75,20 @@ export function App() {
               x: 237.91,
               y: 135.92,
               label: "Santiago",
+              icon: "pickup",
               color: "#f59e0b",
+              popup: "Brigada en campo",
               provinceId: "DO-25",
+            },
+            {
+              id: "people-sdq",
+              x: 480,
+              y: 318,
+              label: "Equipo social",
+              icon: "people",
+              color: "#0f766e",
+              popup: "18 personas asignadas",
+              provinceId: "DO-32",
             },
           ]}
           onProvinceClick={({ province }) => {

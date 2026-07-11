@@ -36,7 +36,41 @@ Pasa valores numéricos en `data` y opcionalmente `colorScale`, `valueMin`, `val
 />
 ```
 
-Prioridad de fill: `disabled` → `selected` → `hover` → `data.fill` → escala → `defaultFill`.
+Prioridad de fill:
+
+1. Disabled: `data[id].disabledFill` o `colors.disabledFill`
+2. Selected: `data[id].selectedFill` o `colors.selectedFill`
+3. Hover/focus: `data[id].hoverFill` o `colors.hoverFill`
+4. Base por provincia: `data[id].fill`
+5. Choropleth: `data[id].value` + `colorScale`
+6. Base global: `colors.defaultFill` o `defaultFill`
+
+Cada provincia puede personalizar su color base y sus estados:
+
+```tsx
+<DominicanRepublicMap
+  colors={{
+    defaultFill: "#dbeafe",
+    selectedFill: "#1d4ed8",
+    hoverFill: "#60a5fa",
+  }}
+  data={{
+    "DO-01": {
+      fill: "#eef2ff",
+      hoverFill: "#c7d2fe",
+      selectedFill: "#be123c",
+      disabledFill: "#94a3b8",
+      popup: "Sede administrativa",
+    },
+    "DO-25": {
+      value: 40,
+      selectedFill: "#047857",
+    },
+  }}
+/>
+```
+
+Esto permite tener una paleta general para el mapa completo y excepciones por provincia cuando un proyecto, estado o institución necesita color propio.
 
 También puedes pasar una paleta completa con `colors`:
 
@@ -56,17 +90,82 @@ Las coordenadas `x` / `y` están en el espacio del `viewBox` del mapa:
 
 ```tsx
 <DominicanRepublicMap
+  showPopup
   markers={[
     {
       id: "sdq",
       x: 450,
       y: 340,
       label: "Santo Domingo",
+      icon: "hospital",
       color: "#ef4444",
+      popup: "Unidad médica disponible",
       provinceId: "DO-01",
+    },
+    {
+      id: "brigade-sti",
+      x: 238,
+      y: 136,
+      label: "Brigada Santiago",
+      icon: "pickup",
+      color: "#f59e0b",
+      popup: "Equipo de respuesta en campo",
+      provinceId: "DO-25",
     },
   ]}
   onMarkerClick={({ marker }) => console.log(marker.id)}
+/>
+```
+
+Iconos built-in disponibles: `dot`, `pin`, `car`, `pickup`, `truck`, `people`, `building`, `hospital`, `school`, `shield`, `warning`.
+
+En React, si necesitas un marcador totalmente custom, puedes seguir usando `renderMarker`.
+
+### Popups
+
+Activa popups con `showPopup`. El popup se abre al click/tap/Enter sobre una provincia o marcador.
+
+```tsx
+<DominicanRepublicMap
+  showPopup
+  data={{
+    "DO-01": {
+      popupTitle: "Distrito Nacional",
+      popup: "120 solicitudes activas",
+      selectedFill: "#be123c",
+    },
+  }}
+  markers={[
+    {
+      id: "people-sdq",
+      x: 444.68,
+      y: 328.42,
+      icon: "people",
+      label: "Equipo social",
+      popup: "18 personas asignadas",
+    },
+  ]}
+/>
+```
+
+Popup custom en React:
+
+```tsx
+<DominicanRepublicMap
+  showPopup
+  renderPopup={(target) =>
+    target.type === "province" ? (
+      <div>
+        <strong>{target.province.name}</strong>
+        <span>{target.data?.metadata?.status as string}</span>
+      </div>
+    ) : (
+      <div>
+        <strong>{target.marker.label}</strong>
+        <span>{target.marker.popup}</span>
+      </div>
+    )
+  }
 />
 ```
 
@@ -81,6 +180,8 @@ onSelectionChange?: (selected: ProvinceId[]) => void
 onMarkerClick?: (event: MarkerEvent) => void
 onZoomChange?: (zoom: ZoomState) => void
 onMapClick?: (event: MouseEvent<SVGSVGElement>) => void
+onPopupOpen?: (target: MapPopupTarget) => void
+onPopupClose?: () => void
 ```
 
 `ProvinceEvent` incluye `province`, `data` opcional y el evento nativo.
@@ -107,9 +208,11 @@ Uso:
 ```html
 <dr-map
   show-labels
+  show-popup
   selection-mode="multiple"
   colors='{"defaultFill":"#dbeafe","selectedFill":"#1d4ed8"}'
-  data='{"DO-01":{"value":200}}'
+  data='{"DO-01":{"value":200,"selectedFill":"#be123c","popup":"Sede administrativa"}}'
+  markers='[{"id":"pickup-sti","x":238,"y":136,"label":"Brigada","icon":"pickup","color":"#f59e0b","popup":"Equipo en campo"}]'
 ></dr-map>
 ```
 
@@ -123,6 +226,8 @@ Eventos DOM emitidos:
 - `markerclick`
 - `zoomchange`
 - `mapclick`
+- `popupopen`
+- `popupclose`
 
 También puedes setear props complejas desde JS:
 

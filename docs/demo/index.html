@@ -5,9 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>dominican-republic-map demos</title>
     <link
+      id="mapStyles"
       rel="stylesheet"
-      href="https://unpkg.com/dominican-republic-map@latest/dist/styles.css"
+      href="../../dist/styles.css"
     />
+    <script>
+      document.querySelector("#mapStyles").addEventListener("error", () => {
+        document.querySelector("#mapStyles").href =
+          "https://unpkg.com/dominican-republic-map@latest/dist/styles.css";
+      });
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@19.1.0",
+          "react-dom/client": "https://esm.sh/react-dom@19.1.0/client",
+          "react/jsx-runtime": "https://esm.sh/react@19.1.0/jsx-runtime"
+        }
+      }
+    </script>
     <style>
       :root {
         color-scheme: light;
@@ -231,6 +247,33 @@
         gap: 8px;
       }
 
+      .toggle-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .toggle-row {
+        display: grid;
+        grid-template-columns: 18px 18px minmax(0, 1fr);
+        align-items: center;
+        gap: 8px;
+        min-height: 34px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 7px 8px;
+        background: #fbfcfe;
+        color: var(--text);
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      .toggle-row input {
+        width: 16px;
+        height: 16px;
+        margin: 0;
+        accent-color: var(--blue);
+      }
+
       .legend-row {
         display: flex;
         align-items: center;
@@ -289,7 +332,7 @@
       <header class="topbar">
         <div>
           <h1>dominican-republic-map</h1>
-          <p>Showcase de selección, choropleth, eventos, marcadores y theming.</p>
+          <p>Showcase de selección, choropleth, colores por provincia, iconos, popups y theming.</p>
         </div>
         <a class="npm-link" href="https://www.npmjs.com/package/dominican-republic-map">
           npm install dominican-republic-map
@@ -306,6 +349,9 @@
           </button>
           <button class="tab" type="button" data-demo="markers" aria-selected="false">
             Marcadores
+          </button>
+          <button class="tab" type="button" data-demo="popups" aria-selected="false">
+            Iconos + popups
           </button>
           <button class="tab" type="button" data-demo="theming" aria-selected="false">
             Theming
@@ -324,6 +370,7 @@
               <section class="map-panel">
                 <dr-map
                   id="eventsMap"
+                  height="100%"
                   show-labels
                   selection-mode="single"
                   default-selected-provinces='["DO-32"]'
@@ -365,6 +412,7 @@
               <section class="map-panel">
                 <dr-map
                   id="choroplethMap"
+                  height="100%"
                   show-labels
                   value-min="20"
                   value-max="100"
@@ -409,7 +457,9 @@
               <section class="map-panel">
                 <dr-map
                   id="markersMap"
+                  height="100%"
                   show-labels
+                  show-popup
                   selection-mode="multiple"
                   default-selected-provinces='["DO-01","DO-25"]'
                   colors='{"defaultFill":"#eef2f6","defaultStroke":"#7b8da1","hoverFill":"#d7e9fa","selectedFill":"#205a86","markerFill":"#b42318","markerStroke":"#ffffff"}'
@@ -433,28 +483,118 @@
               </aside>
             </div>
             <section class="code-panel">
-              <pre><code>&lt;dr-map markers='[{"id":"sdq","x":445,"y":329,"label":"Santo Domingo"}]'
+              <pre><code>&lt;dr-map show-popup
+  markers='[{"id":"sdq","x":445,"y":329,"icon":"hospital","label":"Santo Domingo","popup":"Unidad disponible"}]'
   selection-mode="multiple"&gt;&lt;/dr-map&gt;</code></pre>
+            </section>
+          </article>
+
+          <article class="demo" id="popups">
+            <div class="demo-header">
+              <div>
+                <h2>Iconos y popups por caso de uso</h2>
+                <p class="muted">Hospitales, transporte, brigadas, escuelas, seguridad y alertas con contenido informativo.</p>
+              </div>
+            </div>
+            <div class="demo-grid">
+              <section class="map-panel">
+                <dr-map
+                  id="popupMap"
+                  height="100%"
+                  show-labels
+                  show-popup
+                  selection-mode="multiple"
+                  default-selected-provinces='["DO-01","DO-25","DO-32"]'
+                  colors='{"defaultFill":"#205a86","defaultStroke":"#d7e9fa","hoverFill":"#2f7db6","selectedFill":"#f6b44b","markerFill":"#b42318","markerStroke":"#ffffff"}'
+                ></dr-map>
+              </section>
+              <aside class="inspector">
+                <div class="metric-grid">
+                  <div class="metric">
+                    <strong id="enabledIconCount">6</strong>
+                    <span>iconos</span>
+                  </div>
+                  <div class="metric">
+                    <strong id="popupType">—</strong>
+                    <span>popup activo</span>
+                  </div>
+                </div>
+                <div>
+                  <h3>Habilitar iconos</h3>
+                  <div class="toggle-list" id="iconToggles">
+                    <label class="toggle-row">
+                      <input type="checkbox" value="hospital" checked />
+                      <span class="swatch" style="background:#dc2626"></span>
+                      Hospital
+                    </label>
+                    <label class="toggle-row">
+                      <input type="checkbox" value="pickup" checked />
+                      <span class="swatch" style="background:#f59e0b"></span>
+                      Pickup / brigada
+                    </label>
+                    <label class="toggle-row">
+                      <input type="checkbox" value="people" checked />
+                      <span class="swatch" style="background:#0f766e"></span>
+                      Personas
+                    </label>
+                    <label class="toggle-row">
+                      <input type="checkbox" value="school" checked />
+                      <span class="swatch" style="background:#2563eb"></span>
+                      Escuela
+                    </label>
+                    <label class="toggle-row">
+                      <input type="checkbox" value="shield" checked />
+                      <span class="swatch" style="background:#1d4ed8"></span>
+                      Seguridad
+                    </label>
+                    <label class="toggle-row">
+                      <input type="checkbox" value="warning" checked />
+                      <span class="swatch" style="background:#b42318"></span>
+                      Alerta
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <h3>Popup log</h3>
+                  <div class="event-log" id="popupLog"></div>
+                </div>
+              </aside>
+            </div>
+            <section class="code-panel">
+              <pre><code>const enabled = new Set(["hospital", "pickup"]);
+map.setAttribute(
+  "markers",
+  JSON.stringify(markers.filter((marker) =&gt; enabled.has(marker.icon)))
+);
+
+&lt;dr-map show-popup
+  data='{"DO-01":{"selectedFill":"#be123c","popup":"Sede administrativa"}}'
+  markers='[
+    {"id":"hospital","x":445,"y":329,"icon":"hospital","popup":"Unidad medica"},
+    {"id":"pickup","x":238,"y":136,"icon":"pickup","popup":"Brigada en campo"}
+  ]'&gt;&lt;/dr-map&gt;</code></pre>
             </section>
           </article>
 
           <article class="demo" id="theming">
             <div class="demo-header">
               <div>
-                <h2>Theming y estados</h2>
-                <p class="muted">Colores personalizados, provincias deshabilitadas y estilos por región.</p>
+                <h2>Theming, estados y color por provincia</h2>
+                <p class="muted">Paleta global, excepciones por provincia, estados selected/hover y estilos por región.</p>
               </div>
             </div>
             <div class="demo-grid">
               <section class="map-panel">
                 <dr-map
                   id="themeMap"
+                  height="100%"
                   show-labels
                   show-tooltip="false"
                   selection-mode="multiple"
                   disabled-provinces='["DO-05","DO-07","DO-16"]'
                   default-selected-provinces='["DO-08","DO-30"]'
                   colors='{"defaultFill":"#e9eef3","defaultStroke":"#ffffff","hoverFill":"#ffd08a","selectedFill":"#b86b16","disabledFill":"#c7ccd3","focusStroke":"#205a86"}'
+                  data='{"DO-08":{"fill":"#ecfdf5","selectedFill":"#047857"},"DO-30":{"fill":"#fff7ed","selectedFill":"#b86b16"},"DO-01":{"fill":"#eef2ff","hoverFill":"#c7d2fe","selectedFill":"#be123c"}}'
                 ></dr-map>
               </section>
               <aside class="inspector">
@@ -469,7 +609,11 @@
               </aside>
             </div>
             <section class="code-panel">
-              <pre><code>document.querySelector("dr-map").mapProps = {
+              <pre><code>&lt;dr-map
+  colors='{"defaultFill":"#e9eef3","selectedFill":"#b86b16"}'
+  data='{"DO-01":{"fill":"#eef2ff","hoverFill":"#c7d2fe","selectedFill":"#be123c"}}'&gt;&lt;/dr-map&gt;
+
+document.querySelector("dr-map").mapProps = {
   getProvinceStyle: (province) =>
     province.region === "Cibao Norte" ? { fill: "#205a86" } : undefined
 };</code></pre>
@@ -480,7 +624,11 @@
     </main>
 
     <script type="module">
-      import "https://esm.sh/dominican-republic-map@latest/element?bundle";
+      try {
+        await import("../../dist/element.js");
+      } catch {
+        await import("https://esm.sh/dominican-republic-map@latest/element?bundle");
+      }
 
       const qs = (selector) => document.querySelector(selector);
       const qsa = (selector) => [...document.querySelectorAll(selector)];
@@ -501,11 +649,26 @@
       };
 
       const markers = [
-        { id: "sdq", x: 445, y: 329, label: "Santo Domingo", size: 8 },
-        { id: "sti", x: 238, y: 136, label: "Santiago", size: 8 },
-        { id: "pop", x: 345, y: 55, label: "Puerto Plata", size: 7 },
-        { id: "sam", x: 650, y: 160, label: "Samaná", size: 7 },
-        { id: "punta-cana", x: 742, y: 384, label: "Punta Cana", size: 8 }
+        { id: "sdq", x: 445, y: 329, label: "Hospital Santo Domingo", icon: "hospital", color: "#dc2626", popup: "Unidad medica disponible", provinceId: "DO-01", size: 8 },
+        { id: "sti", x: 238, y: 136, label: "Brigada Santiago", icon: "pickup", color: "#f59e0b", popup: "Equipo en campo", provinceId: "DO-25", size: 8 },
+        { id: "pop", x: 345, y: 55, label: "Puerto Plata", icon: "truck", color: "#0f766e", popup: "Ruta de distribucion", provinceId: "DO-18", size: 7 },
+        { id: "sam", x: 650, y: 160, label: "Samaná", icon: "people", color: "#7c3aed", popup: "Equipo social asignado", provinceId: "DO-20", size: 7 },
+        { id: "punta-cana", x: 742, y: 384, label: "Punta Cana", icon: "pin", color: "#b42318", popup: "Punto turistico priorizado", provinceId: "DO-11", size: 8 }
+      ];
+
+      const popupData = {
+        "DO-01": { fill: "#eef2ff", selectedFill: "#be123c", popupTitle: "Distrito Nacional", popup: "Sede administrativa y servicios digitales" },
+        "DO-25": { fill: "#ecfdf5", selectedFill: "#047857", popupTitle: "Santiago", popup: "Operaciones regionales y brigadas activas" },
+        "DO-32": { fill: "#fff7ed", selectedFill: "#b86b16", popupTitle: "Santo Domingo", popup: "Cobertura metropolitana" }
+      };
+
+      const popupMarkers = [
+        { id: "hospital-sdq", x: 445, y: 329, icon: "hospital", label: "Hospital movil", color: "#dc2626", popup: "Unidad medica disponible", provinceId: "DO-01", size: 8 },
+        { id: "pickup-sti", x: 238, y: 136, icon: "pickup", label: "Brigada", color: "#f59e0b", popup: "Equipo de respuesta en campo", provinceId: "DO-25", size: 8 },
+        { id: "people-sdq", x: 486, y: 320, icon: "people", label: "Equipo social", color: "#0f766e", popup: "18 personas asignadas", provinceId: "DO-32", size: 8 },
+        { id: "school", x: 560, y: 310, icon: "school", label: "Escuela priorizada", color: "#2563eb", popup: "Centro educativo activo", provinceId: "DO-32", size: 7 },
+        { id: "shield", x: 300, y: 230, icon: "shield", label: "Seguridad", color: "#1d4ed8", popup: "Punto de control", provinceId: "DO-24", size: 7 },
+        { id: "warning", x: 175, y: 500, icon: "warning", label: "Alerta", color: "#b42318", popup: "Zona de atencion especial", provinceId: "DO-16", size: 7 }
       ];
 
       function setJsonAttribute(id, name, value) {
@@ -518,6 +681,22 @@
         entry.textContent = message;
         log.prepend(entry);
         [...log.children].slice(4).forEach((node) => node.remove());
+      }
+
+      function getEnabledIcons() {
+        return new Set(
+          qsa("#iconToggles input:checked").map((input) => input.value)
+        );
+      }
+
+      function updatePopupMarkers() {
+        const enabled = getEnabledIcons();
+        const visibleMarkers = popupMarkers.filter((marker) =>
+          enabled.has(marker.icon)
+        );
+        setJsonAttribute("popupMap", "markers", visibleMarkers);
+        qs("#enabledIconCount").textContent = String(visibleMarkers.length);
+        qs("#popupType").textContent = "—";
       }
 
       function showDemo(id) {
@@ -536,6 +715,18 @@
 
       setJsonAttribute("choroplethMap", "data", choroplethData);
       setJsonAttribute("markersMap", "markers", markers);
+      setJsonAttribute("popupMap", "data", popupData);
+      updatePopupMarkers();
+
+      qsa("#iconToggles input").forEach((input) => {
+        input.addEventListener("change", () => {
+          updatePopupMarkers();
+          pushLog(
+            "#popupLog",
+            `${input.checked ? "habilitado" : "oculto"}: ${input.value}`
+          );
+        });
+      });
 
       qs("#eventsMap").addEventListener("provinceclick", (event) => {
         qs("#eventsSelected").textContent = event.detail.province.id;
@@ -556,6 +747,28 @@
       });
       qs("#markersMap").addEventListener("markerclick", (event) => {
         pushLog("#markerLog", event.detail.marker.label ?? event.detail.marker.id);
+      });
+      qs("#markersMap").addEventListener("popupopen", (event) => {
+        pushLog(
+          "#markerLog",
+          event.detail.type === "marker"
+            ? `popup: ${event.detail.marker.label ?? event.detail.marker.id}`
+            : `popup: ${event.detail.province.name}`
+        );
+      });
+
+      qs("#popupMap").addEventListener("popupopen", (event) => {
+        qs("#popupType").textContent = event.detail.type;
+        pushLog(
+          "#popupLog",
+          event.detail.type === "marker"
+            ? event.detail.marker.label ?? event.detail.marker.id
+            : event.detail.province.name
+        );
+      });
+      qs("#popupMap").addEventListener("popupclose", () => {
+        qs("#popupType").textContent = "—";
+        pushLog("#popupLog", "popup cerrado");
       });
 
       customElements.whenDefined("dr-map").then(() => {

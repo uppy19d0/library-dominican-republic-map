@@ -78,13 +78,37 @@ export interface MapColors {
 export interface ProvinceDataValue {
   value?: number | string | null;
   label?: ReactNode;
+  /** Base province fill. Overrides choropleth color for this province. */
   fill?: string;
+  /** Province fill while hovered/focused. */
+  hoverFill?: string;
+  /** Province fill while selected. */
+  selectedFill?: string;
+  /** Province fill while disabled. */
+  disabledFill?: string;
   stroke?: string;
   disabled?: boolean;
+  /** Content shown by the built-in click popup. */
+  popup?: ReactNode;
+  /** Optional popup title. Defaults to province name. */
+  popupTitle?: ReactNode;
   metadata?: Record<string, unknown>;
 }
 
 export type ProvinceData = Partial<Record<ProvinceId, ProvinceDataValue>>;
+
+export type MapMarkerIcon =
+  | "dot"
+  | "pin"
+  | "car"
+  | "pickup"
+  | "truck"
+  | "people"
+  | "building"
+  | "hospital"
+  | "school"
+  | "shield"
+  | "warning";
 
 export interface MapMarker {
   id: string;
@@ -93,11 +117,29 @@ export interface MapMarker {
   /** SVG y coordinate in map viewBox space */
   y: number;
   label?: string;
+  /** Built-in icon name. Defaults to `dot`. */
+  icon?: MapMarkerIcon;
   color?: string;
   size?: number;
   provinceId?: ProvinceId;
+  /** Content shown by the built-in click popup. */
+  popup?: ReactNode;
+  /** Optional popup title. Defaults to marker label/id. */
+  popupTitle?: ReactNode;
   metadata?: Record<string, unknown>;
 }
+
+export type MapPopupTarget =
+  | {
+      type: "province";
+      province: Province;
+      data?: ProvinceDataValue;
+    }
+  | {
+      type: "marker";
+      marker: MapMarker;
+      province?: Province;
+    };
 
 export interface ProvinceEvent {
   province: Province;
@@ -176,6 +218,12 @@ export interface DominicanRepublicMapProps {
   showTooltip?: boolean;
   /** Custom tooltip renderer */
   renderTooltip?: (province: Province, data?: ProvinceDataValue) => ReactNode;
+  /** Show a click/tap popup for provinces and markers */
+  showPopup?: boolean;
+  /** Close the popup when clicking the SVG background */
+  closePopupOnMapClick?: boolean;
+  /** Custom popup renderer */
+  renderPopup?: (target: MapPopupTarget) => ReactNode;
   /** Markers overlaid on the map */
   markers?: MapMarker[];
   /** Custom marker renderer */
@@ -206,6 +254,10 @@ export interface DominicanRepublicMapProps {
   onMarkerClick?: (event: MarkerEvent) => void;
   /** Click in SVG background (outside provinces and markers) */
   onMapClick?: (event: MouseEvent<SVGSVGElement>) => void;
+  /** Popup opened by province/marker activation */
+  onPopupOpen?: (target: MapPopupTarget) => void;
+  /** Popup closed by close button or map background click */
+  onPopupClose?: () => void;
   /** Custom style resolver per province */
   getProvinceStyle?: (province: Province, state: {
     hovered: boolean;

@@ -114,9 +114,9 @@ export function resolveProvinceFill(options: {
     disabledFill,
   } = options;
 
-  if (disabled) return disabledFill;
-  if (selected) return selectedFill;
-  if (hovered) return hoverFill;
+  if (disabled) return data?.disabledFill ?? disabledFill;
+  if (selected) return data?.selectedFill ?? selectedFill;
+  if (hovered) return data?.hoverFill ?? hoverFill;
   if (data?.fill) return data.fill;
   if (typeof data?.value === "number" && domain) {
     return interpolateColor(data.value, domain.min, domain.max, colorScale);

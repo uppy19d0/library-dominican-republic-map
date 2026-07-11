@@ -5,6 +5,7 @@ import type {
   DominicanRepublicMapProps,
   MapColors,
   MapMarker,
+  MapPopupTarget,
   ProvinceData,
   ProvinceEvent,
   ProvinceId,
@@ -24,6 +25,8 @@ type ElementProps = Partial<
     | "onMarkerClick"
     | "onZoomChange"
     | "onMapClick"
+    | "onPopupOpen"
+    | "onPopupClose"
   >
 >;
 
@@ -38,6 +41,8 @@ export interface DominicanRepublicMapElementEventMap {
   markerclick: CustomEvent<{ marker: MapMarker }>;
   zoomchange: CustomEvent<ZoomState>;
   mapclick: CustomEvent<{ x: number; y: number }>;
+  popupopen: CustomEvent<MapPopupTarget>;
+  popupclose: CustomEvent<void>;
 }
 
 const OBSERVED_ATTRIBUTES = [
@@ -47,6 +52,8 @@ const OBSERVED_ATTRIBUTES = [
   "selection-mode",
   "show-labels",
   "show-tooltip",
+  "show-popup",
+  "close-popup-on-map-click",
   "enable-zoom",
   "show-zoom-controls",
   "animated",
@@ -162,6 +169,10 @@ export class DominicanRepublicMapElement extends HTMLElement {
       selectionMode: parseSelectionMode(this.getAttribute("selection-mode")),
       showLabels: parseBoolean(this.getAttribute("show-labels")),
       showTooltip: parseBoolean(this.getAttribute("show-tooltip")),
+      showPopup: parseBoolean(this.getAttribute("show-popup")),
+      closePopupOnMapClick: parseBoolean(
+        this.getAttribute("close-popup-on-map-click"),
+      ),
       enableZoom: parseBoolean(this.getAttribute("enable-zoom")),
       showZoomControls: parseBoolean(this.getAttribute("show-zoom-controls")),
       animated: parseBoolean(this.getAttribute("animated")),
@@ -224,6 +235,8 @@ export class DominicanRepublicMapElement extends HTMLElement {
         onZoomChange: (zoom) => emitEvent(this, "zoomchange", zoom),
         onMapClick: (event) =>
           emitEvent(this, "mapclick", { x: event.clientX, y: event.clientY }),
+        onPopupOpen: (target) => emitEvent(this, "popupopen", target),
+        onPopupClose: () => emitEvent(this, "popupclose", undefined),
       }),
     );
   }

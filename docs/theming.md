@@ -58,6 +58,28 @@ O en un solo objeto con `colors`:
 />
 ```
 
+Colores por provincia y por estado:
+
+```tsx
+<DominicanRepublicMap
+  colors={{
+    defaultFill: "#dbeafe",
+    selectedFill: "#1d4ed8",
+  }}
+  data={{
+    "DO-01": {
+      fill: "#eef2ff",
+      hoverFill: "#c7d2fe",
+      selectedFill: "#be123c",
+    },
+    "DO-25": {
+      fill: "#ecfdf5",
+      selectedFill: "#047857",
+    },
+  }}
+/>
+```
+
 Importa los estilos una vez en tu app:
 
 ```ts

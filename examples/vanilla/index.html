@@ -27,8 +27,11 @@
       <h1>Vanilla JS + &lt;dr-map&gt;</h1>
       <dr-map
         show-labels
+        show-popup
         selection-mode="multiple"
         colors='{"defaultFill":"#dbeafe","selectedFill":"#1d4ed8","markerFill":"#dc2626"}'
+        data='{"DO-01":{"fill":"#eef2ff","selectedFill":"#be123c","popup":"Sede administrativa"},"DO-25":{"selectedFill":"#047857","popup":"Operaciones regionales"}}'
+        markers='[{"id":"car-sdq","x":444.68,"y":328.42,"label":"Transporte","icon":"car","color":"#dc2626","popup":"Flota activa","provinceId":"DO-01"},{"id":"shield-sti","x":237.91,"y":135.92,"label":"Seguridad","icon":"shield","color":"#2563eb","popup":"Punto de control","provinceId":"DO-25"}]'
       ></dr-map>
       <p id="last-event">Último evento: —</p>
     </main>
@@ -42,6 +45,14 @@
 
       map?.addEventListener("provinceclick", (event) => {
         lastEvent.textContent = `Último evento: ${event.detail.province.name}`;
+      });
+
+      map?.addEventListener("popupopen", (event) => {
+        const target = event.detail;
+        lastEvent.textContent =
+          target.type === "province"
+            ? `Popup: ${target.province.name}`
+            : `Popup: ${target.marker.label ?? target.marker.id}`;
       });
     </script>
   </body>

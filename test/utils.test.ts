@@ -69,6 +69,40 @@ describe("color and selection helpers", () => {
     assert.equal(fill, "#ff0000");
   });
 
+  it("uses per-province state fills before global state fills", () => {
+    assert.equal(
+      resolveProvinceFill({
+        data: { selectedFill: "#123456", value: 10 },
+        domain: { min: 0, max: 10 },
+        colorScale: ["#111111", "#eeeeee"],
+        defaultFill: "#aaaaaa",
+        hovered: false,
+        selected: true,
+        disabled: false,
+        hoverFill: "#bbbbbb",
+        selectedFill: "#ff0000",
+        disabledFill: "#cccccc",
+      }),
+      "#123456",
+    );
+
+    assert.equal(
+      resolveProvinceFill({
+        data: { fill: "#654321", hoverFill: "#abcdef" },
+        domain: null,
+        colorScale: ["#111111", "#eeeeee"],
+        defaultFill: "#aaaaaa",
+        hovered: true,
+        selected: false,
+        disabled: false,
+        hoverFill: "#bbbbbb",
+        selectedFill: "#ff0000",
+        disabledFill: "#cccccc",
+      }),
+      "#abcdef",
+    );
+  });
+
   it("toggles selection modes", () => {
     assert.deepEqual(toggleSelection([], "DO-01", "none"), []);
     assert.deepEqual(toggleSelection([], "DO-01", "single"), ["DO-01"]);

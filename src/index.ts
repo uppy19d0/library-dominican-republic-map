@@ -36,6 +36,8 @@ export type {
   DominicanRepublicMapProps,
   MapMarker,
   MapColors,
+  MapMarkerIcon,
+  MapPopupTarget,
   MarkerEvent,
   Province,
   ProvinceData,
