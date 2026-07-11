@@ -3,14 +3,14 @@
 ## Instalación
 
 ```bash
-npm install react-dominican-republic-map
+npm install dominican-republic-map
 ```
 
 ## Uso mínimo
 
 ```tsx
-import { DominicanRepublicMap } from "react-dominican-republic-map";
-import "react-dominican-republic-map/styles.css";
+import { DominicanRepublicMap } from "dominican-republic-map";
+import "dominican-republic-map/styles.css";
 
 export function App() {
   return (

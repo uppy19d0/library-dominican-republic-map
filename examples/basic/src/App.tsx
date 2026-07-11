@@ -3,8 +3,8 @@ import {
   DominicanRepublicMap,
   PROVINCES,
   type ProvinceId,
-} from "react-dominican-republic-map";
-import "react-dominican-republic-map/styles.css";
+} from "dominican-republic-map";
+import "dominican-republic-map/styles.css";
 
 function buildDemoData() {
   const data: Record<string, { value: number; label: string }> = {};
@@ -26,7 +26,7 @@ export function App() {
   return (
     <main className="page">
       <header className="hero">
-        <p className="eyebrow">react-dominican-republic-map</p>
+        <p className="eyebrow">dominican-republic-map</p>
         <h1>Mapa interactivo de República Dominicana</h1>
         <p>
           Pinch zoom, pan, selección múltiple, choropleth y marcadores. Prueba

@@ -1,5 +1,5 @@
 {
-  "name": "react-dominican-republic-map-example-vanilla",
+  "name": "dominican-republic-map-example-vanilla",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,7 +11,7 @@
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-dominican-republic-map": "file:../.."
+    "dominican-republic-map": "file:../.."
   },
   "devDependencies": {
     "vite": "^6.3.5"

@@ -1,4 +1,4 @@
-# react-dominican-republic-map
+# dominican-republic-map
 
 [![CI](https://github.com/uppy19d0/react-dominican-republic-map/actions/workflows/ci.yml/badge.svg)](https://github.com/uppy19d0/react-dominican-republic-map/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
@@ -9,7 +9,7 @@ Creado por [Luis Aneuris Tavarez De Jesus](https://www.ltavarez.me/).
 
 ## Screenshot
 
-![react-dominican-republic-map screenshot](./docs/assets/screenshot.svg)
+![dominican-republic-map screenshot](./docs/assets/screenshot.svg)
 
 ## Features
 
@@ -30,7 +30,7 @@ Creado por [Luis Aneuris Tavarez De Jesus](https://www.ltavarez.me/).
 ## Installation
 
 ```bash
-npm install react-dominican-republic-map
+npm install dominican-republic-map
 ```
 
 ## Framework support
@@ -42,8 +42,8 @@ npm install react-dominican-republic-map
 ## Quick Start
 
 ```tsx
-import { DominicanRepublicMap } from "react-dominican-republic-map";
-import "react-dominican-republic-map/styles.css";
+import { DominicanRepublicMap } from "dominican-republic-map";
+import "dominican-republic-map/styles.css";
 
 export function App() {
   return (
@@ -94,7 +94,7 @@ import {
   getProvince,
   findProvinceByName,
   getProvincesByRegion,
-} from "react-dominican-republic-map";
+} from "dominican-republic-map";
 
 getProvince("DO-25"); // Santiago
 findProvinceByName("Pedernales");
@@ -108,8 +108,8 @@ Ejemplos completos: [examples/README.md](./examples/README.md)
 ### React (componente)
 
 ```tsx
-import { DominicanRepublicMap } from "react-dominican-republic-map";
-import "react-dominican-republic-map/styles.css";
+import { DominicanRepublicMap } from "dominican-republic-map";
+import "dominican-republic-map/styles.css";
 
 <DominicanRepublicMap
   colors={{
@@ -124,8 +124,8 @@ import "react-dominican-republic-map/styles.css";
 ### Vue / Svelte / Angular / otros (Web Component)
 
 ```ts
-import "react-dominican-republic-map/element";
-import "react-dominican-republic-map/styles.css";
+import "dominican-republic-map/element";
+import "dominican-republic-map/styles.css";
 ```
 
 > Nota: esta librería usa React internamente, así que en Vue/Svelte también debes tener instalados `react` y `react-dom` (peer dependencies).
@@ -151,8 +151,8 @@ map?.addEventListener("provinceclick", (event) => {
 
 ```ts
 // main.ts
-import "react-dominican-republic-map/element";
-import "react-dominican-republic-map/styles.css";
+import "dominican-republic-map/element";
+import "dominican-republic-map/styles.css";
 ```
 
 ```ts

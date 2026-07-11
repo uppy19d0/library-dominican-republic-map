@@ -13,7 +13,7 @@
   <rect x="112" y="72" width="1056" height="576" rx="28" fill="url(#bg)"/>
   <rect x="160" y="120" width="960" height="480" rx="20" fill="url(#panel)"/>
   <text x="208" y="176" fill="#0F172A" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">
-    react-dominican-republic-map
+    dominican-republic-map
   </text>
   <text x="208" y="210" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="18">
     Selección, choropleth, eventos y uso cross-framework (React/Vue/Svelte)

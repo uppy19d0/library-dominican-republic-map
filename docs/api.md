@@ -92,14 +92,14 @@ Guías completas por framework: [docs/frameworks](./frameworks/README.md).
 Registra el custom element:
 
 ```ts
-import { registerDominicanRepublicMapElement } from "react-dominican-republic-map";
+import { registerDominicanRepublicMapElement } from "dominican-republic-map";
 registerDominicanRepublicMapElement();
 ```
 
 Registro automático:
 
 ```ts
-import "react-dominican-republic-map/element";
+import "dominican-republic-map/element";
 ```
 
 Uso:
@@ -127,7 +127,7 @@ Eventos DOM emitidos:
 También puedes setear props complejas desde JS:
 
 ```ts
-import type { DominicanRepublicMapElement } from "react-dominican-republic-map";
+import type { DominicanRepublicMapElement } from "dominican-republic-map";
 
 const element = document.querySelector("dr-map") as DominicanRepublicMapElement | null;
 if (element) {

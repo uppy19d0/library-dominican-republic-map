@@ -5,15 +5,15 @@ Este ejemplo usa el Web Component exportado por la librería.
 ## Instalar en tu app Angular existente
 
 ```bash
-npm install react react-dom react-dominican-republic-map
+npm install react react-dom dominican-republic-map
 ```
 
 ## 1) Registrar componente y estilos
 
 ```ts
 // src/main.ts
-import "react-dominican-republic-map/element";
-import "react-dominican-republic-map/styles.css";
+import "dominican-republic-map/element";
+import "dominican-republic-map/styles.css";
 ```
 
 ## 2) Permitir custom elements

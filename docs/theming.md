@@ -61,5 +61,5 @@ O en un solo objeto con `colors`:
 Importa los estilos una vez en tu app:
 
 ```ts
-import "react-dominican-republic-map/styles.css";
+import "dominican-republic-map/styles.css";
 ```

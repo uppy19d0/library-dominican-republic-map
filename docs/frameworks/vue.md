@@ -3,14 +3,14 @@
 ## Instalación
 
 ```bash
-npm install react react-dom react-dominican-republic-map
+npm install react react-dom dominican-republic-map
 ```
 
 ## Registro del custom element
 
 ```ts
-import "react-dominican-republic-map/element";
-import "react-dominican-republic-map/styles.css";
+import "dominican-republic-map/element";
+import "dominican-republic-map/styles.css";
 ```
 
 ## Uso en template

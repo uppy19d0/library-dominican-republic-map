@@ -10,11 +10,11 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "react-dominican-republic-map/styles.css": resolve(
+      "dominican-republic-map/styles.css": resolve(
         __dirname,
         "../../src/styles/map.css",
       ),
-      "react-dominican-republic-map": resolve(__dirname, "../../src/index.ts"),
+      "dominican-republic-map": resolve(__dirname, "../../src/index.ts"),
     },
   },
 });
