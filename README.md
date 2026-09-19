@@ -217,6 +217,7 @@ NgModule apps can add `CUSTOM_ELEMENTS_SCHEMA` to the module instead. See [docs/
 | `showPopup` | `boolean` | `false` | Click/tap popup |
 | `renderPopup` | `(target) => ReactNode` | - | Custom popup renderer in React |
 | `colors` | `MapColors` | - | Unified palette |
+| `messages` | `Partial<MapMessages>` | Spanish labels | Accessible labels for popup and zoom controls |
 | `colorScale` | `string[]` | blue scale | Choropleth color scale |
 | `markers` | `MapMarker[]` | `[]` | Marker points/icons over the map |
 | `onProvinceClick` | `(event) => void` | - | Province click/tap/Enter |
@@ -238,8 +239,12 @@ import {
 
 getProvince("DO-25"); // Santiago
 findProvinceByName("Pedernales");
+findProvinceByName("san jose de ocoa"); // Accent-insensitive
 getProvincesByRegion("Cibao Norte");
 ```
+
+The React and Web Component entry points are safe to import during Node.js
+server rendering. Registering `<dr-map>` remains a browser-only operation.
 
 ## Examples
 

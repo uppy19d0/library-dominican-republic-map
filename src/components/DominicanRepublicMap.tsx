@@ -35,6 +35,13 @@ const DEFAULT_STROKE = "#0f172a";
 const HOVER_FILL = "#60a5fa";
 const SELECTED_FILL = "#2563eb";
 const DISABLED_FILL = "#e2e8f0";
+const DEFAULT_MESSAGES = {
+  closePopup: "Cerrar popup",
+  zoomControls: "Zoom",
+  zoomIn: "Acercar",
+  zoomOut: "Alejar",
+  resetZoom: "Restablecer zoom",
+} as const;
 
 function isPointerLikeEvent(
   event: ReactPointerEvent | KeyboardEvent | MouseEvent,
@@ -219,6 +226,7 @@ export function DominicanRepublicMap({
   selectedFill,
   disabledFill,
   colors,
+  messages,
   colorScale,
   valueMin,
   valueMax,
@@ -294,6 +302,10 @@ export function DominicanRepublicMap({
     disabledFill ?? colors?.disabledFill ?? DISABLED_FILL;
   const resolvedMarkerFill = colors?.markerFill ?? "#ef4444";
   const resolvedMarkerStroke = colors?.markerStroke ?? "#fff";
+  const resolvedMessages = {
+    ...DEFAULT_MESSAGES,
+    ...messages,
+  };
 
   const { containerRef, zoom: zoomState, zoomBy, resetZoom, gestureHandlers } =
     useMapGestures({
@@ -734,7 +746,7 @@ export function DominicanRepublicMap({
           <button
             type="button"
             className="rd-map__popup-close"
-            aria-label="Cerrar popup"
+            aria-label={resolvedMessages.closePopup}
             onClick={closePopup}
           >
             ×
@@ -750,11 +762,15 @@ export function DominicanRepublicMap({
       ) : null}
 
       {enableZoom && showZoomControls ? (
-        <div className="rd-map__controls" role="group" aria-label="Zoom">
+        <div
+          className="rd-map__controls"
+          role="group"
+          aria-label={resolvedMessages.zoomControls}
+        >
           <button
             type="button"
             className="rd-map__control"
-            aria-label="Acercar"
+            aria-label={resolvedMessages.zoomIn}
             onClick={() => zoomBy(1 + mergedZoomConfig.step)}
           >
             +
@@ -762,7 +778,7 @@ export function DominicanRepublicMap({
           <button
             type="button"
             className="rd-map__control"
-            aria-label="Alejar"
+            aria-label={resolvedMessages.zoomOut}
             onClick={() => zoomBy(1 / (1 + mergedZoomConfig.step))}
           >
             −
@@ -770,7 +786,7 @@ export function DominicanRepublicMap({
           <button
             type="button"
             className="rd-map__control"
-            aria-label="Restablecer zoom"
+            aria-label={resolvedMessages.resetZoom}
             onClick={resetZoom}
           >
             ⟲

@@ -3,6 +3,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { DominicanRepublicMap } from "./components/DominicanRepublicMap";
 import type {
   DominicanRepublicMapProps,
+  MapMessages,
   MapColors,
   MapMarker,
   MapPopupTarget,
@@ -71,7 +72,11 @@ const OBSERVED_ATTRIBUTES = [
   "data",
   "markers",
   "colors",
+  "messages",
 ] as const;
+
+const HTMLElementBase = (globalThis.HTMLElement ??
+  class {}) as typeof HTMLElement;
 
 function parseBoolean(
   value: string | null,
@@ -124,7 +129,7 @@ function emitEvent<T>(target: HTMLElement, name: string, detail: T): void {
   );
 }
 
-export class DominicanRepublicMapElement extends HTMLElement {
+export class DominicanRepublicMapElement extends HTMLElementBase {
   static get observedAttributes(): string[] {
     return [...OBSERVED_ATTRIBUTES];
   }
@@ -198,6 +203,7 @@ export class DominicanRepublicMapElement extends HTMLElement {
       data: parseJson<ProvinceData>(this.getAttribute("data")),
       markers: parseJson<MapMarker[]>(this.getAttribute("markers")),
       colors: parseJson<MapColors>(this.getAttribute("colors")),
+      messages: parseJson<Partial<MapMessages>>(this.getAttribute("messages")),
     };
   }
 

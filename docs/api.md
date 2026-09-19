@@ -84,6 +84,23 @@ También puedes pasar una paleta completa con `colors`:
 />
 ```
 
+### Etiquetas accesibles
+
+Los controles incluyen etiquetas en español por defecto. Puedes traducirlas o
+adaptarlas con `messages`:
+
+```tsx
+<DominicanRepublicMap
+  messages={{
+    closePopup: "Close popup",
+    zoomControls: "Map zoom",
+    zoomIn: "Zoom in",
+    zoomOut: "Zoom out",
+    resetZoom: "Reset zoom",
+  }}
+/>
+```
+
 ### Markers
 
 Las coordenadas `x` / `y` están en el espacio del `viewBox` del mapa:
@@ -243,6 +260,7 @@ Uso:
 | `data` | `data` | JSON `ProvinceData` |
 | `markers` | `markers` | JSON `MapMarker[]` |
 | `colors` | `colors` | JSON `MapColors` |
+| `messages` | `messages` | JSON `Partial<MapMessages>` |
 
 Los booleanos pueden usarse como atributo vacio (`show-popup`) o como string (`show-popup="false"`). Para pasar funciones, render custom o datos grandes, usa la propiedad `mapProps` desde JavaScript.
 

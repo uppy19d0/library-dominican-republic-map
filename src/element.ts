@@ -3,7 +3,9 @@ import {
   registerDominicanRepublicMapElement,
 } from "./web-component";
 
-registerDominicanRepublicMapElement();
+if (globalThis.customElements) {
+  registerDominicanRepublicMapElement();
+}
 
 export { DominicanRepublicMapElement, registerDominicanRepublicMapElement };
 export type {

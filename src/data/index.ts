@@ -24,17 +24,27 @@ export function getProvince(id: ProvinceId): Province {
 }
 
 export function getProvincesByRegion(region: string): Province[] {
+  const normalizedRegion = normalizeProvinceSearch(region);
   return PROVINCES.filter(
-    (province) => province.region.toLowerCase() === region.toLowerCase(),
+    (province) => normalizeProvinceSearch(province.region) === normalizedRegion,
   );
 }
 
+export function normalizeProvinceSearch(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
+
 export function findProvinceByName(name: string): Province | undefined {
-  const needle = name.trim().toLowerCase();
+  const needle = normalizeProvinceSearch(name);
   return PROVINCES.find(
     (province) =>
-      province.name.toLowerCase() === needle ||
-      province.abbr.toLowerCase() === needle ||
-      province.capital.toLowerCase() === needle,
+      normalizeProvinceSearch(province.name) === needle ||
+      normalizeProvinceSearch(province.abbr) === needle ||
+      normalizeProvinceSearch(province.capital) === needle,
   );
 }

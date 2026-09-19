@@ -108,6 +108,7 @@ export function App() {
 | `showPopup` | `boolean` | `false` | Popup al click/tap |
 | `renderPopup` | `(target) => ReactNode` | — | Popup custom en React |
 | `colors` | `MapColors` | — | Paleta unificada (`defaultFill`, `selectedFill`, etc.) |
+| `messages` | `Partial<MapMessages>` | etiquetas en español | Etiquetas accesibles del popup y los controles de zoom |
 | `colorScale` | `string[]` | blues | Escala choropleth |
 | `markers` | `MapMarker[]` | `[]` | Puntos/iconos sobre el mapa |
 | `onProvinceClick` | `(e) => void` | — | Click / tap / Enter |
@@ -131,8 +132,12 @@ import {
 
 getProvince("DO-25"); // Santiago
 findProvinceByName("Pedernales");
+findProvinceByName("san jose de ocoa"); // Ignora diferencias de tildes
 getProvincesByRegion("Cibao Norte");
 ```
+
+Las entradas de React y Web Component se pueden importar durante SSR en
+Node.js. El registro de `<dr-map>` sigue realizándose únicamente en el navegador.
 
 ## Examples
 

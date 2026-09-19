@@ -12,6 +12,7 @@ import {
   findProvinceByName,
   getProvince,
   getProvincesByRegion,
+  normalizeProvinceSearch,
   PROVINCES,
   REGIONS,
 } from "../src/data";
@@ -33,6 +34,13 @@ describe("province dataset", () => {
     assert.equal(findProvinceByName("Distrito Nacional")?.id, "DO-01");
     assert.ok(getProvincesByRegion("Ozama").length >= 2);
     assert.ok(REGIONS.includes("Cibao Norte"));
+  });
+
+  it("normalizes accents and repeated whitespace in province searches", () => {
+    assert.equal(findProvinceByName("san jose  de ocoa")?.id, "DO-31");
+    assert.equal(findProvinceByName("dajabon")?.id, "DO-05");
+    assert.equal(findProvinceByName("san francisco de macoris")?.id, "DO-06");
+    assert.equal(normalizeProvinceSearch("  El\u00edas   Pi\u00f1a "), "elias pina");
   });
 });
 

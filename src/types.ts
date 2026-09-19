@@ -75,6 +75,14 @@ export interface MapColors {
   focusStroke?: string;
 }
 
+export interface MapMessages {
+  closePopup: string;
+  zoomControls: string;
+  zoomIn: string;
+  zoomOut: string;
+  resetZoom: string;
+}
+
 export interface ProvinceDataValue {
   value?: number | string | null;
   label?: ReactNode;
@@ -198,6 +206,8 @@ export interface DominicanRepublicMapProps {
   disabledFill?: string;
   /** Color palette overrides in one object */
   colors?: MapColors;
+  /** Accessible labels for popup and zoom controls */
+  messages?: Partial<MapMessages>;
   /** Choropleth color scale (low → high). Used when data values are numeric. */
   colorScale?: string[];
   /** Explicit min for choropleth domain */
