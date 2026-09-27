@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/uppy19d0/library-dominican-republic-map/actions/workflows/ci.yml/badge.svg)](https://github.com/uppy19d0/library-dominican-republic-map/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![npm](https://img.shields.io/npm/v/dominican-republic-map.svg)](https://www.npmjs.com/package/dominican-republic-map)
 
 Language: English | [Espanol](./README.es.md)
 
@@ -34,6 +35,13 @@ GitHub and npm READMEs cannot run embedded JavaScript, so the screenshot opens a
 - Full TypeScript types
 - CSS variables for theming
 - React API plus Web Component API for Vue, Svelte, Angular, and vanilla JavaScript
+
+## Production Readiness
+
+- CI validates TypeScript, tests, SSR rendering, build output, and npm package contents.
+- Releases are published from version tags with npm provenance support.
+- Public security, contribution, and code of conduct policies are included in the repository and npm package.
+- Runtime is framework-friendly: React consumers use the typed component, while other frameworks can use the custom element.
 
 ## Installation
 
