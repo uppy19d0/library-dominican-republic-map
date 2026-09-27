@@ -205,9 +205,30 @@ import "dominican-republic-map/styles.css";
       provinceId: "DO-25",
     },
   ]}
-  onProvinceClick={({ province }) => console.log("React:", province.id)}
+  onProvinceClick={({ province, municipalities, mainMunicipality }) => {
+    console.log("React:", province.id);
+    console.log(mainMunicipality?.name, municipalities.length);
+  }}
 />;
 ```
+
+### Geodata de provincias y municipios
+
+```ts
+import {
+  getProvinceClickPayload,
+  getProvinceMainMunicipality,
+  getProvinceMunicipalities,
+} from "dominican-republic-map/geodata";
+
+getProvinceMainMunicipality("DO-25")?.name; // Santiago de los Caballeros
+getProvinceMunicipalities("DO-25").length; // 10
+
+const payload = getProvinceClickPayload("DO-32");
+payload?.mainMunicipality.name; // Santo Domingo Este
+```
+
+Los eventos `onProvinceClick` y `provinceclick` tambien incluyen `municipalities` y `mainMunicipality`.
 
 ### Vue / Svelte / Angular / otros (Web Component)
 
@@ -235,6 +256,8 @@ Eventos DOM:
 const map = document.querySelector("dr-map");
 map?.addEventListener("provinceclick", (event) => {
   console.log("Web component:", event.detail.province.id);
+  console.log(event.detail.mainMunicipality?.name);
+  console.log(event.detail.municipalities.length);
 });
 ```
 

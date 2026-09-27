@@ -1,3 +1,4 @@
+import type { Municipality } from "dominican-republic-geodata";
 import type {
   CSSProperties,
   FocusEvent,
@@ -142,6 +143,8 @@ export type MapPopupTarget =
       type: "province";
       province: Province;
       data?: ProvinceDataValue;
+      municipalities?: readonly Municipality[];
+      mainMunicipality?: Municipality;
     }
   | {
       type: "marker";
@@ -152,6 +155,8 @@ export type MapPopupTarget =
 export interface ProvinceEvent {
   province: Province;
   data?: ProvinceDataValue;
+  municipalities: readonly Municipality[];
+  mainMunicipality?: Municipality;
   nativeEvent:
     | MouseEvent
     | TouchEvent

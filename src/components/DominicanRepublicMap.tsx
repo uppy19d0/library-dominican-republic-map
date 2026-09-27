@@ -4,10 +4,12 @@ import {
   useMemo,
   useState,
   type CSSProperties,
+  type FocusEvent as ReactFocusEvent,
   type KeyboardEvent,
   type MouseEvent,
   type PointerEvent as ReactPointerEvent,
 } from "react";
+import { getProvinceClickPayload } from "dominican-republic-geodata";
 import {
   MAP_HEIGHT,
   MAP_NAME_ES,
@@ -22,6 +24,8 @@ import type {
   MapMarker,
   MapPopupTarget,
   Province,
+  ProvinceDataValue,
+  ProvinceEvent,
   ProvinceId,
 } from "../types";
 import {
@@ -44,7 +48,7 @@ const DEFAULT_MESSAGES = {
 } as const;
 
 function isPointerLikeEvent(
-  event: ReactPointerEvent | KeyboardEvent | MouseEvent,
+  event: ReactPointerEvent | KeyboardEvent | MouseEvent | ReactFocusEvent,
 ): event is ReactPointerEvent | MouseEvent {
   return "clientX" in event && "clientY" in event;
 }
@@ -339,7 +343,7 @@ export function DominicanRepublicMap({
   const openPopup = useCallback(
     (
       target: MapPopupTarget,
-      nativeEvent: ReactPointerEvent | KeyboardEvent | MouseEvent,
+      nativeEvent: ReactPointerEvent | KeyboardEvent | MouseEvent | ReactFocusEvent,
       fallbackX: number,
       fallbackY: number,
     ) => {
@@ -383,10 +387,29 @@ export function DominicanRepublicMap({
     [containerRef, showTooltip],
   );
 
+  const createProvinceEvent = useCallback(
+    (
+      province: Province,
+      provinceData: ProvinceDataValue | undefined,
+      nativeEvent: ReactPointerEvent | KeyboardEvent | MouseEvent | ReactFocusEvent,
+    ): ProvinceEvent => {
+      const payload = getProvinceClickPayload(province.id);
+
+      return {
+        province,
+        data: provinceData,
+        municipalities: payload?.municipalities ?? [],
+        mainMunicipality: payload?.mainMunicipality,
+        nativeEvent,
+      };
+    },
+    [],
+  );
+
   const handleProvinceActivate = useCallback(
     (
       province: Province,
-      nativeEvent: ReactPointerEvent | KeyboardEvent | MouseEvent,
+      nativeEvent: ReactPointerEvent | KeyboardEvent | MouseEvent | ReactFocusEvent,
     ) => {
       if (disabledSet.has(province.id)) return;
       const provinceData = data?.[province.id];
@@ -396,26 +419,27 @@ export function DominicanRepublicMap({
         setSelected(toggleSelection(selected, province.id, selectionMode));
       }
 
+      const payload = getProvinceClickPayload(province.id);
+
       openPopup(
         {
           type: "province",
           province,
           data: provinceData,
+          municipalities: payload?.municipalities ?? [],
+          mainMunicipality: payload?.mainMunicipality,
         },
         nativeEvent,
         province.labelX,
         province.labelY,
       );
 
-      onProvinceClick?.({
-        province,
-        data: provinceData,
-        nativeEvent,
-      });
+      onProvinceClick?.(createProvinceEvent(province, provinceData, nativeEvent));
     },
     [
       data,
       disabledSet,
+      createProvinceEvent,
       onProvinceClick,
       openPopup,
       selected,
@@ -549,11 +573,7 @@ export function DominicanRepublicMap({
                   if (disabled) return;
                   setHoveredId(province.id);
                   updateTooltip(province, event.clientX, event.clientY);
-                  onProvinceEnter?.({
-                    province,
-                    data: provinceData,
-                    nativeEvent: event,
-                  });
+                  onProvinceEnter?.(createProvinceEvent(province, provinceData, event));
                 }}
                 onPointerMove={(event) => {
                   if (disabled || !showTooltip) return;
@@ -566,11 +586,7 @@ export function DominicanRepublicMap({
                   setTooltip((current) =>
                     current?.province.id === province.id ? null : current,
                   );
-                  onProvinceLeave?.({
-                    province,
-                    data: provinceData,
-                    nativeEvent: event,
-                  });
+                  onProvinceLeave?.(createProvinceEvent(province, provinceData, event));
                 }}
                 onClick={(event) => {
                   // Avoid treating map pan as click when zoomed; simple click still works.
@@ -578,11 +594,7 @@ export function DominicanRepublicMap({
                 }}
                 onDoubleClick={(event) => {
                   if (disabled) return;
-                  onProvinceDoubleClick?.({
-                    province,
-                    data: provinceData,
-                    nativeEvent: event,
-                  });
+                  onProvinceDoubleClick?.(createProvinceEvent(province, provinceData, event));
                 }}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
@@ -602,11 +614,7 @@ export function DominicanRepublicMap({
                       y: rect.height * (province.labelY / MAP_HEIGHT),
                     });
                   }
-                  onProvinceEnter?.({
-                    province,
-                    data: provinceData,
-                    nativeEvent: event,
-                  });
+                  onProvinceEnter?.(createProvinceEvent(province, provinceData, event));
                 }}
                 onBlur={(event) => {
                   setHoveredId((current) =>
@@ -615,11 +623,7 @@ export function DominicanRepublicMap({
                   setTooltip((current) =>
                     current?.province.id === province.id ? null : current,
                   );
-                  onProvinceLeave?.({
-                    province,
-                    data: provinceData,
-                    nativeEvent: event,
-                  });
+                  onProvinceLeave?.(createProvinceEvent(province, provinceData, event));
                 }}
               />
             );

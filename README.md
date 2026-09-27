@@ -35,6 +35,7 @@ GitHub and npm READMEs cannot run embedded JavaScript, so the screenshot opens a
 - Full TypeScript types
 - CSS variables for theming
 - React API plus Web Component API for Vue, Svelte, Angular, and vanilla JavaScript
+- Geodata helpers for municipalities and main municipality/city via `dominican-republic-map/geodata`
 
 ## Production Readiness
 
@@ -109,8 +110,9 @@ export function App() {
           popup: "Metropolitan follow-up",
         },
       }}
-      onProvinceClick={({ province }) => {
+      onProvinceClick={({ province, municipalities, mainMunicipality }) => {
         console.log(province.name, province.region);
+        console.log(mainMunicipality?.name, municipalities.length);
       }}
     />
   );
@@ -144,6 +146,8 @@ const map = document.querySelector("dr-map");
 
 map?.addEventListener("provinceclick", (event) => {
   console.log(event.detail.province.id);
+  console.log(event.detail.mainMunicipality?.name);
+  console.log(event.detail.municipalities.length);
 });
 
 map?.addEventListener("popupopen", (event) => {
@@ -249,6 +253,27 @@ getProvince("DO-25"); // Santiago
 findProvinceByName("Pedernales");
 findProvinceByName("san jose de ocoa"); // Accent-insensitive
 getProvincesByRegion("Cibao Norte");
+```
+
+## Province geodata
+
+Use the `geodata` subpath when a click needs municipalities or the main municipality/city:
+
+```ts
+import {
+  getProvinceClickPayload,
+  getProvinceMainMunicipality,
+  getProvinceMunicipalities,
+} from "dominican-republic-map/geodata";
+
+getProvinceMainMunicipality("DO-25")?.name; // Santiago de los Caballeros
+getProvinceMunicipalities("DO-25").length; // 10
+
+const payload = getProvinceClickPayload("DO-32");
+payload?.mainMunicipality.name; // Santo Domingo Este
+```
+
+React and Web Component province events also include `municipalities` and `mainMunicipality`.
 ```
 
 The React and Web Component entry points are safe to import during Node.js

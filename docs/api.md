@@ -201,7 +201,7 @@ onPopupOpen?: (target: MapPopupTarget) => void
 onPopupClose?: () => void
 ```
 
-`ProvinceEvent` incluye `province`, `data` opcional y el evento nativo.
+`ProvinceEvent` incluye `province`, `data` opcional, `municipalities`, `mainMunicipality` y el evento nativo.
 
 Guías completas por framework: [docs/frameworks](./frameworks/README.md).
 

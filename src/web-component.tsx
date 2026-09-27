@@ -219,21 +219,29 @@ export class DominicanRepublicMapElement extends HTMLElementBase {
           emitEvent(this, "provinceclick", {
             province: event.province,
             data: event.data,
+            municipalities: event.municipalities,
+            mainMunicipality: event.mainMunicipality,
           }),
         onProvinceDoubleClick: (event) =>
           emitEvent(this, "provincedoubleclick", {
             province: event.province,
             data: event.data,
+            municipalities: event.municipalities,
+            mainMunicipality: event.mainMunicipality,
           }),
         onProvinceEnter: (event) =>
           emitEvent(this, "provinceenter", {
             province: event.province,
             data: event.data,
+            municipalities: event.municipalities,
+            mainMunicipality: event.mainMunicipality,
           }),
         onProvinceLeave: (event) =>
           emitEvent(this, "provinceleave", {
             province: event.province,
             data: event.data,
+            municipalities: event.municipalities,
+            mainMunicipality: event.mainMunicipality,
           }),
         onSelectionChange: (selected) =>
           emitEvent(this, "selectionchange", { selected }),
