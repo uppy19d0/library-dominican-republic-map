@@ -353,6 +353,9 @@
           <button class="tab" type="button" data-demo="popups" aria-selected="false">
             Iconos + popups
           </button>
+          <button class="tab" type="button" data-demo="geodata" aria-selected="false">
+            Geodata
+          </button>
           <button class="tab" type="button" data-demo="theming" aria-selected="false">
             Theming
           </button>
@@ -576,6 +579,65 @@ map.setAttribute(
             </section>
           </article>
 
+
+          <article class="demo" id="geodata">
+            <div class="demo-header">
+              <div>
+                <h2>Geodata: provincia → municipios</h2>
+                <p class="muted">Haz click en una provincia para leer municipio principal, cantidad y lista de municipios desde <code>dominican-republic-map/geodata</code>.</p>
+              </div>
+            </div>
+            <div class="demo-grid">
+              <section class="map-panel">
+                <dr-map
+                  id="geodataMap"
+                  height="100%"
+                  show-labels
+                  show-popup
+                  selection-mode="single"
+                  default-selected-provinces='["DO-25"]'
+                  colors='{"defaultFill":"#dbeafe","defaultStroke":"#ffffff","hoverFill":"#60a5fa","selectedFill":"#0f766e","focusStroke":"#f59e0b"}'
+                ></dr-map>
+              </section>
+              <aside class="inspector">
+                <div class="metric-grid">
+                  <div class="metric">
+                    <strong id="geoProvince">Santiago</strong>
+                    <span>provincia</span>
+                  </div>
+                  <div class="metric">
+                    <strong id="geoCount">10</strong>
+                    <span>municipios</span>
+                  </div>
+                </div>
+                <div>
+                  <h3>Municipio principal</h3>
+                  <div class="event-log">
+                    <p id="geoMain">Santiago de los Caballeros</p>
+                  </div>
+                </div>
+                <div>
+                  <h3>Municipios</h3>
+                  <div class="event-log" id="geoMunicipalities"></div>
+                </div>
+              </aside>
+            </div>
+            <section class="code-panel">
+              <pre><code>import { getProvinceClickPayload } from "dominican-republic-map/geodata";
+
+&lt;dr-map id="map" show-popup&gt;&lt;/dr-map&gt;
+
+map.addEventListener("provinceclick", (event) =&gt; {
+  console.log(event.detail.province.name);
+  console.log(event.detail.mainMunicipality.name);
+  console.log(event.detail.municipalities.map((m) =&gt; m.name));
+});
+
+const payload = getProvinceClickPayload("DO-25");
+console.log(payload.mainMunicipality.name); // Santiago de los Caballeros</code></pre>
+            </section>
+          </article>
+
           <article class="demo" id="theming">
             <div class="demo-header">
               <div>
@@ -624,10 +686,13 @@ document.querySelector("dr-map").mapProps = {
     </main>
 
     <script type="module">
+      let mapGeodata;
       try {
         await import("../../dist/element.js");
+        mapGeodata = await import("../../dist/geodata.js");
       } catch {
         await import("https://esm.sh/dominican-republic-map@latest/element?bundle");
+        mapGeodata = await import("https://esm.sh/dominican-republic-map@latest/geodata?bundle");
       }
 
       const qs = (selector) => document.querySelector(selector);
@@ -699,6 +764,24 @@ document.querySelector("dr-map").mapProps = {
         qs("#popupType").textContent = "—";
       }
 
+
+      function updateGeodataPanel(provinceIdOrName) {
+        const payload = mapGeodata.getProvinceClickPayload(provinceIdOrName);
+        if (!payload) return;
+        qs("#geoProvince").textContent = payload.province.name;
+        qs("#geoCount").textContent = String(payload.municipalities.length);
+        qs("#geoMain").textContent = payload.mainMunicipality.name;
+        const list = qs("#geoMunicipalities");
+        list.innerHTML = "";
+        payload.municipalities.forEach((municipality) => {
+          const item = document.createElement("p");
+          item.textContent = municipality.isMain
+            ? `${municipality.name} · principal`
+            : municipality.name;
+          list.append(item);
+        });
+      }
+
       function showDemo(id) {
         qsa(".tab").forEach((button) => {
           button.setAttribute("aria-selected", String(button.dataset.demo === id));
@@ -717,10 +800,12 @@ document.querySelector("dr-map").mapProps = {
       setJsonAttribute("markersMap", "markers", markers);
       setJsonAttribute("popupMap", "data", popupData);
       updatePopupMarkers();
+      updateGeodataPanel("DO-25");
 
       qsa("#iconToggles input").forEach((input) => {
         input.addEventListener("change", () => {
           updatePopupMarkers();
+      updateGeodataPanel("DO-25");
           pushLog(
             "#popupLog",
             `${input.checked ? "habilitado" : "oculto"}: ${input.value}`
@@ -769,6 +854,10 @@ document.querySelector("dr-map").mapProps = {
       qs("#popupMap").addEventListener("popupclose", () => {
         qs("#popupType").textContent = "—";
         pushLog("#popupLog", "popup cerrado");
+      });
+
+      qs("#geodataMap").addEventListener("provinceclick", (event) => {
+        updateGeodataPanel(event.detail.province.id);
       });
 
       customElements.whenDefined("dr-map").then(() => {
