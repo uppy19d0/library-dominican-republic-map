@@ -27,6 +27,9 @@
     "README.md",
     "README.es.md",
     "LICENSE",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md",
     "docs"
   ],
   "sideEffects": [
@@ -98,6 +101,7 @@
     "node": ">=18"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   }
 }
