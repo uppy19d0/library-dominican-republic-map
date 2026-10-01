@@ -1,0 +1,3 @@
+export { MUNICIPALITIES, MUNICIPALITIES_BY_PROVINCE, MUNICIPALITY_BY_ID, MUNICIPALITY_IDS, PROVINCES, PROVINCE_BY_ID, PROVINCE_IDS, findMunicipality, findProvince, getMunicipalitiesByProvince, getMunicipality, getProvinceClickPayload, getProvinceGeodata, getProvinceMainMunicipality, getProvinceMunicipalities, isMunicipalityId, isProvinceId } from 'dominican-republic-geodata';
+//# sourceMappingURL=geodata.js.map
+//# sourceMappingURL=geodata.js.map
