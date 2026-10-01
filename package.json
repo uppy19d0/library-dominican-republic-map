@@ -1,6 +1,6 @@
 {
   "name": "dominican-republic-map",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Interactive, touch-friendly Dominican Republic SVG map for React and Web Components (Vue, Svelte, Angular, vanilla).",
   "type": "module",
   "main": "./dist/index.cjs",
