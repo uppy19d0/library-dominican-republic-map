@@ -10,3 +10,11 @@ examples/basic/node_modules
 examples/basic/.vite
 .vite
 *.tsbuildinfo
+
+**/.npmrc
+
+.npm-cache/
+
+*.tgz
+
+.security-artifacts/
