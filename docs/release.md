@@ -42,3 +42,7 @@ The live README preview assets are deployed by `.github/workflows/pages.yml`:
 
 The demo imports `../../dist/element.js` and `../../dist/styles.css`, so the Pages artifact must include `dist/` at the site root.
 If the GitHub Pages URL returns 404, enable Pages in repository Settings and select `gh-pages` / root as the source.
+
+## First release without Trusted Publishing
+
+An explicitly selected `bootstrap` workflow-dispatch input can use the temporary `NPM_BOOTSTRAP_TOKEN` Actions secret. Dispatch against the matching version tag; all release checks still run. Delete the secret after the attempt. npm may stage the release and require maintainer 2FA approval; inspect the actual registry version and attestation before announcing publication. Prefer OIDC Trusted Publishing for subsequent releases.
