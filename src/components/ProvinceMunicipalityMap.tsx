@@ -1,6 +1,6 @@
 import { useState, type CSSProperties } from 'react';
 import { getProvinceMunicipalities } from 'dominican-republic-geodata';
-import { getMunicipalityViewBox, getProvinceBoundaries, getMissingProvinceBoundaries } from '../data/municipalities';
+import { getMunicipalityViewBox, getProvinceBoundaries, getMissingProvinceBoundaries, getProvinceBoundaryAttribution } from '../data/municipalities';
 import type { MunicipalityData, MunicipalityEvent, MunicipalityMessages, MapColors, Province } from '../types';
 
 const defaults: MunicipalityMessages = {
@@ -55,7 +55,7 @@ export function ProvinceMunicipalityMap({ province, onBack, onMunicipalityClick,
       <span>{selectedMunicipality.id}{selectedData?.value != null ? ` · ${selectedData.value}` : ''}</span>
       {selectedData?.popup && <p>{selectedData.popup}</p>}
     </div>}
-    <small className="rd-map__attribution">geoBoundaries / Caribbean GeoPortal · 2020 · CC BY 4.0. Geometría simplificada; no constituye un límite legal actualizado.</small>
+    <small className="rd-map__attribution">{getProvinceBoundaryAttribution(province.id)}</small>
     {missing.length > 0 && <p role="status">{text.missing}: {missing.map(item => item.name).join(', ')}.</p>}
   </section>;
 }

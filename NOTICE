@@ -6,3 +6,15 @@ License: https://creativecommons.org/licenses/by/4.0/
 Changes: upstream simplified polygons joined to municipal names/IDs; projection to
 SVG coordinates, coordinate rounding, and provincial grouping.
 Coverage and known omissions: docs/municipality-drilldown.md.
+
+Peravia display supplement: HDX / OCHA, Dominican Republic COD-AB DOM v01.
+Original contributors: source and attribution metadata at https://data.humdata.org/dataset/cod-ab-dom
+License reported by HDX: Creative Commons Attribution for Intergovernmental Organisations (CC BY-IGO).
+License terms: https://data.humdata.org/faqs/licenses
+Source archive: https://data.humdata.org/dataset/1b26ea94-4d28-4167-9209-4984ab087973/resource/66c7a7c9-5be1-4b1a-8b5a-a559e0c970a8/download/dom_admin_boundaries.geojson.zip
+SHA-256: 1edcc3e974d00fd0858d2673b88f53a60d536d38ef74bcd56a5d654fe0b70037
+Source geometry edited 2017; valid-on metadata 2021-06-29.
+Changes: historical ADM4 Matanzas polygon assigned to existing catalog municipality
+DO-17-02; Baní clipped to exclude it; Nizao retained from the same source.
+Projected and rounded for SVG display, with original topology verified before rounding.
+No endorsement by OCHA/HDX is implied. This display supplement is not current legal cartography.

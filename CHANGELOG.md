@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.1
+
+- Fix Matanzas selection in Peravia by adding its licensed historical display polygon.
+- Replace Peravia display geometry with a consistent attributed HDX supplement; exclude Matanzas from Baní to avoid overlapping selections.
+- Pin the source archive and verify topology, containment and coverage during generation.
+
 ## 1.4.0
 
 - Add municipality application data, event payloads, controlled province navigation and localized detail messages.

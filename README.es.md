@@ -327,7 +327,7 @@ MIT © Luis Aneuris Tavarez De Jesus
 
 ## Province zoom and municipalities / Provincias y municipios
 
-Use `drillDown` in React or `drill-down` on `<dr-map>` to open a province with municipal polygons, selection, and a back button. See [examples, coverage and geometry license](docs/municipality-drilldown.md). The bundled 2020 snapshot has 154 municipal polygons; four municipalities remain available in the list without invented borders.
+Use `drillDown` in React or `drill-down` on `<dr-map>` to open a province with municipal polygons, selection, and a back button. See [examples, coverage and geometry license](docs/municipality-drilldown.md). The dated display sources include 155 municipal polygons, including Matanzas in Peravia; three municipalities remain available only in the list. Peravia uses an attributed HDX supplement; other provinces use the 2020 geoBoundaries snapshot.
 
 ## Application data and custom territories / Datos y territorios propios
 
