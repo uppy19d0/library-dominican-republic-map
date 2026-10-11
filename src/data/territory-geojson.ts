@@ -42,7 +42,9 @@ export function parseTerritoryGeoJson(input: unknown): TerritoryDataset {
         for (const position of ring) {
           if (++points > 100000) throw new RangeError('Geometry exceeds 100000 positions');
           if (!Array.isArray(position) || position.length !== 2 || !position.every(Number.isFinite) || Math.abs(position[0]) > 180 || Math.abs(position[1]) > 90) throw new TypeError('Expected finite WGS84 [longitude, latitude] positions');
-          const [x, latitude] = position; const y = -latitude;
+          const [longitude, latitude] = position;
+          // Normalize degrees to SVG units so focus strokes remain stable for small extents.
+          const x = longitude * 1000; const y = -latitude * 1000;
           bounds[0] = Math.min(bounds[0], x); bounds[1] = Math.min(bounds[1], y);
           bounds[2] = Math.max(bounds[2], x); bounds[3] = Math.max(bounds[3], y);
           coordinates.push(`${x},${y}`);
@@ -51,7 +53,7 @@ export function parseTerritoryGeoJson(input: unknown): TerritoryDataset {
         segments.push(`M${coordinates.join('L')}Z`);
       }
     }
-    if (bounds[0] === bounds[2] || bounds[1] === bounds[3] || bounds[2] - bounds[0] > 180) throw new RangeError('Zero extent and antimeridian geometries are unsupported');
+    if (bounds[0] === bounds[2] || bounds[1] === bounds[3] || bounds[2] - bounds[0] > 180000) throw new RangeError('Zero extent and antimeridian geometries are unsupported');
     return { id, name, level, provinceId, path: segments.join(''), bounds };
   });
   const provinces = new Set(territories.filter(item => item.level === 'province').map(item => item.id));
@@ -60,7 +62,7 @@ export function parseTerritoryGeoJson(input: unknown): TerritoryDataset {
     if (territory.provinceId && !provinces.has(territory.provinceId)) throw new TypeError(`Unknown parent province: ${territory.provinceId}`);
   }
   const longitudes = territories.flatMap(item => [item.bounds[0], item.bounds[2]]);
-  if (Math.max(...longitudes) - Math.min(...longitudes) > 180) throw new RangeError('Antimeridian datasets are unsupported');
+  if (Math.max(...longitudes) - Math.min(...longitudes) > 180000) throw new RangeError('Antimeridian datasets are unsupported');
   return { territories };
 }
 
