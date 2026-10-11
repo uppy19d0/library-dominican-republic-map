@@ -332,3 +332,17 @@ interface Province {
   labelY: number;
 }
 ```
+
+## Municipality and custom-territory APIs (1.4+)
+
+| React option | Purpose |
+| --- | --- |
+| `drillDown` | Open the included province's municipal view |
+| `municipalityData` | Municipality-ID keyed values, labels, fills and popup text |
+| `focusedProvince` / `onFocusedProvinceChange` | Optional controlled province detail; null returns to the country |
+| `municipalityMessages` | Translate detail instructions, list, selection and back controls |
+| `onMunicipalityClick` | Receives municipality, province, associated data and native event |
+
+`GeoJsonTerritoryMap({ source, data?, attribution, messages?, onTerritoryClick? })` is a separate custom province/municipality layer. `parseTerritoryGeoJson(source)` validates its bounded FeatureCollection and returns normalized territory paths/bounds. See [custom contracts and limits](custom-territories.md); see [included municipality examples](municipality-drilldown.md).
+
+Web Component: `municipality-data`, `municipality-messages`, `focused-province`, `provinceviewchange`, and `municipalityclick.detail.data`. Custom layers use `mapProps.territorySource`, `territoryData`, `territoryAttribution`, `territoryclick` and `territoryerror`. Included and custom source events remain distinct.
