@@ -152,7 +152,25 @@ export type MapPopupTarget =
       province?: Province;
     };
 
+export interface MunicipalityDataValue {
+  value?: number | string | null;
+  label?: string;
+  fill?: string;
+  selectedFill?: string;
+  popup?: string;
+}
+export type MunicipalityData = Record<string, MunicipalityDataValue>;
+export interface MunicipalityMessages {
+  back: string;
+  instruction: string;
+  list: string;
+  boundaries: string;
+  missing: string;
+  selected: string;
+}
+
 export interface MunicipalityEvent {
+  data?: MunicipalityDataValue;
   municipality: Municipality;
   province: Province;
   nativeEvent: MouseEvent | KeyboardEvent;
@@ -251,6 +269,12 @@ export interface DominicanRepublicMapProps {
   renderMarker?: (marker: MapMarker) => ReactNode;
   /** Open a fitted province view with dated municipal boundaries on activation. */
   drillDown?: boolean;
+  /** Optional controlled province detail; null shows the country. */
+  focusedProvince?: ProvinceId | null;
+  onFocusedProvinceChange?: (provinceId: ProvinceId | null) => void;
+  /** Application data keyed by municipality ID; does not alter geography. */
+  municipalityData?: MunicipalityData;
+  municipalityMessages?: Partial<MunicipalityMessages>;
   onMunicipalityClick?: (event: MunicipalityEvent) => void;
 
   /** Enable wheel / pinch zoom and drag pan */

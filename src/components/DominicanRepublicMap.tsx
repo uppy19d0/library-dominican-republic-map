@@ -248,6 +248,10 @@ export function DominicanRepublicMap({
   markers = [],
   renderMarker,
   drillDown = false,
+  focusedProvince: focusedProvinceId,
+  onFocusedProvinceChange,
+  municipalityData,
+  municipalityMessages,
   onMunicipalityClick,
   enableZoom = true,
   zoomConfig,
@@ -266,7 +270,13 @@ export function DominicanRepublicMap({
   onPopupClose,
   getProvinceStyle,
 }: DominicanRepublicMapProps) {
-  const [focusedProvince, setFocusedProvince] = useState<Province | null>(null);
+  const [uncontrolledFocusedProvince, setUncontrolledFocusedProvince] = useState<Province | null>(null);
+  const focusedProvince = focusedProvinceId === undefined ? uncontrolledFocusedProvince
+    : focusedProvinceId === null ? null : PROVINCE_BY_ID[focusedProvinceId] ?? null;
+  const setFocusedProvince = useCallback((province: Province | null) => {
+    if (focusedProvinceId === undefined) setUncontrolledFocusedProvince(province);
+    onFocusedProvinceChange?.(province?.id ?? null);
+  }, [focusedProvinceId, onFocusedProvinceChange]);
   const reactId = useId();
   const titleId = `${reactId}-title`;
   const [hoveredId, setHoveredId] = useState<ProvinceId | null>(null);
@@ -430,7 +440,7 @@ export function DominicanRepublicMap({
       }
       const payload = getProvinceClickPayload(province.id);
 
-      openPopup(
+      if (!drillDown) openPopup(
         {
           type: "province",
           province,
@@ -448,6 +458,7 @@ export function DominicanRepublicMap({
     [
       data,
       drillDown,
+      setFocusedProvince,
       closePopup,
       disabledSet,
       createProvinceEvent,
@@ -497,6 +508,7 @@ export function DominicanRepublicMap({
   if (drillDown && focusedProvince) {
     return <div className={`rd-map rd-map--detail ${className ?? ""}`} style={{ ...containerStyle, aspectRatio: undefined, height: height ?? "auto", minHeight: height ? undefined : 360 }}>
       <ProvinceMunicipalityMap key={focusedProvince.id} province={focusedProvince}
+        data={municipalityData} messages={municipalityMessages} colors={colors}
         onBack={() => {
           setFocusedProvince(null);
           requestAnimationFrame(() => containerRef.current?.querySelector<SVGPathElement>(`path[id="${focusedProvince.id}"]`)?.focus());
