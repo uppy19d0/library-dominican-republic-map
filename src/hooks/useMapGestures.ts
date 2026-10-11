@@ -129,7 +129,8 @@ export function useMapGestures({
       if (!enabled) return;
       const el = containerRef.current;
       if (!el) return;
-      el.setPointerCapture(event.pointerId);
+      // Defer container capture until a drag/pinch starts: capturing here
+      // retargets ordinary province clicks to the container.
       pointersRef.current.set(event.pointerId, {
         x: event.clientX,
         y: event.clientY,
@@ -182,6 +183,11 @@ export function useMapGestures({
     (event: ReactPointerEvent) => {
       if (!enabled) return;
       if (!pointersRef.current.has(event.pointerId)) return;
+      const startPoint = panStartRef.current?.point;
+      if (pointersRef.current.size >= 2 || (startPoint &&
+          Math.hypot(event.clientX - startPoint.x, event.clientY - startPoint.y) > 5)) {
+        containerRef.current?.setPointerCapture(event.pointerId);
+      }
       pointersRef.current.set(event.pointerId, {
         x: event.clientX,
         y: event.clientY,

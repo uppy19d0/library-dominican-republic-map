@@ -495,9 +495,12 @@ export function DominicanRepublicMap({
   };
 
   if (drillDown && focusedProvince) {
-    return <div className={`rd-map rd-map--detail ${className ?? ""}`} style={containerStyle}>
+    return <div className={`rd-map rd-map--detail ${className ?? ""}`} style={{ ...containerStyle, aspectRatio: undefined, height: height ?? "auto", minHeight: height ? undefined : 360 }}>
       <ProvinceMunicipalityMap key={focusedProvince.id} province={focusedProvince}
-        onBack={() => setFocusedProvince(null)} onMunicipalityClick={onMunicipalityClick} />
+        onBack={() => {
+          setFocusedProvince(null);
+          requestAnimationFrame(() => containerRef.current?.querySelector<SVGPathElement>(`path[id="${focusedProvince.id}"]`)?.focus());
+        }} onMunicipalityClick={onMunicipalityClick} />
     </div>;
   }
 

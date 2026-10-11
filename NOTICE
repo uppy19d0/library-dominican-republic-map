@@ -1,0 +1,8 @@
+Library source code: MIT (see LICENSE).
+Municipal display geometry: Creative Commons Attribution 4.0 International.
+Source: geoBoundaries DOM-ADM2-3306468, Caribbean GeoPortal, representing 2020.
+Pinned input: https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/DOM/ADM2/geoBoundaries-DOM-ADM2_simplified.geojson
+License: https://creativecommons.org/licenses/by/4.0/
+Changes: upstream simplified polygons joined to municipal names/IDs; projection to
+SVG coordinates, coordinate rounding, and provincial grouping.
+Coverage and known omissions: docs/municipality-drilldown.md.
