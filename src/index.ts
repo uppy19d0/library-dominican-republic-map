@@ -41,6 +41,7 @@ export type {
   MapMarkerIcon,
   MapPopupTarget,
   MarkerEvent,
+  MunicipalityEvent,
   Province,
   ProvinceData,
   ProvinceDataValue,
@@ -51,3 +52,6 @@ export type {
   ZoomConfig,
   ZoomState,
 } from "./types";
+
+export { getProvinceBoundaries, getMissingProvinceBoundaries, MUNICIPALITY_BOUNDARY_SOURCE } from './data/municipalities';
+export type { MunicipalityBoundary } from './data/municipalities';

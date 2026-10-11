@@ -257,3 +257,13 @@
     font-size: 0.75rem;
   }
 }
+
+.rd-map--detail { overflow: auto; min-height: 360px; }
+.rd-map__municipality-detail { padding: 16px; }
+.rd-map__municipality-header { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.rd-map__municipality-svg { display: block; width: 100%; height: 340px; }
+.rd-map__municipality { cursor: pointer; }
+.rd-map__municipality:hover { fill: #93c5fd; }
+.rd-map__municipality:focus-visible { stroke: #f59e0b; stroke-width: 3; outline: none; }
+.rd-map__municipality-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.rd-map__municipality-list button[aria-pressed="true"] { background: #1d4ed8; color: white; }

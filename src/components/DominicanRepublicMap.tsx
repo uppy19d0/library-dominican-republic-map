@@ -1,3 +1,4 @@
+import { ProvinceMunicipalityMap } from './ProvinceMunicipalityMap';
 import {
   useCallback,
   useId,
@@ -246,6 +247,8 @@ export function DominicanRepublicMap({
   renderPopup,
   markers = [],
   renderMarker,
+  drillDown = false,
+  onMunicipalityClick,
   enableZoom = true,
   zoomConfig,
   showZoomControls = true,
@@ -263,6 +266,7 @@ export function DominicanRepublicMap({
   onPopupClose,
   getProvinceStyle,
 }: DominicanRepublicMapProps) {
+  const [focusedProvince, setFocusedProvince] = useState<Province | null>(null);
   const reactId = useId();
   const titleId = `${reactId}-title`;
   const [hoveredId, setHoveredId] = useState<ProvinceId | null>(null);
@@ -419,6 +423,11 @@ export function DominicanRepublicMap({
         setSelected(toggleSelection(selected, province.id, selectionMode));
       }
 
+      if (drillDown) {
+        closePopup();
+        setTooltip(null);
+        setFocusedProvince(province);
+      }
       const payload = getProvinceClickPayload(province.id);
 
       openPopup(
@@ -438,6 +447,8 @@ export function DominicanRepublicMap({
     },
     [
       data,
+      drillDown,
+      closePopup,
       disabledSet,
       createProvinceEvent,
       onProvinceClick,
@@ -482,6 +493,13 @@ export function DominicanRepublicMap({
     "--rd-map-focus-stroke": colors?.focusStroke ?? "#f59e0b",
     ...style,
   };
+
+  if (drillDown && focusedProvince) {
+    return <div className={`rd-map rd-map--detail ${className ?? ""}`} style={containerStyle}>
+      <ProvinceMunicipalityMap key={focusedProvince.id} province={focusedProvince}
+        onBack={() => setFocusedProvince(null)} onMunicipalityClick={onMunicipalityClick} />
+    </div>;
+  }
 
   return (
     <div

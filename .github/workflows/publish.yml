@@ -1,6 +1,12 @@
 name: Publish to npm
 
 on:
+  workflow_dispatch:
+    inputs:
+      bootstrap:
+        description: Use the temporary token to bootstrap a staged release
+        type: boolean
+        default: false
   push:
     tags:
       - "v*.*.*"
@@ -62,3 +68,5 @@ jobs:
 
       - name: Publish to npm
         run: npm publish --provenance --access public --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{ inputs.bootstrap && secrets.NPM_BOOTSTRAP_TOKEN || '' }}

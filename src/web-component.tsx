@@ -11,6 +11,7 @@ import type {
   ProvinceEvent,
   ProvinceId,
   ZoomState,
+  MunicipalityEvent,
 } from "./types";
 
 type SizeAttribute = string | number | undefined;
@@ -18,6 +19,7 @@ type SizeAttribute = string | number | undefined;
 type ElementProps = Partial<
   Omit<
     DominicanRepublicMapProps,
+    | "onMunicipalityClick"
     | "onProvinceClick"
     | "onProvinceDoubleClick"
     | "onProvinceEnter"
@@ -34,6 +36,7 @@ type ElementProps = Partial<
 export type DominicanRepublicMapElementProps = ElementProps;
 
 export interface DominicanRepublicMapElementEventMap {
+  municipalityclick: CustomEvent<Omit<MunicipalityEvent, "nativeEvent">>;
   provinceclick: CustomEvent<Omit<ProvinceEvent, "nativeEvent">>;
   provincedoubleclick: CustomEvent<Omit<ProvinceEvent, "nativeEvent">>;
   provinceenter: CustomEvent<Omit<ProvinceEvent, "nativeEvent">>;
@@ -55,6 +58,7 @@ const OBSERVED_ATTRIBUTES = [
   "show-tooltip",
   "show-popup",
   "close-popup-on-map-click",
+  "drill-down",
   "enable-zoom",
   "show-zoom-controls",
   "animated",
@@ -178,6 +182,7 @@ export class DominicanRepublicMapElement extends HTMLElementBase {
       closePopupOnMapClick: parseBoolean(
         this.getAttribute("close-popup-on-map-click"),
       ),
+      drillDown: parseBoolean(this.getAttribute("drill-down")),
       enableZoom: parseBoolean(this.getAttribute("enable-zoom")),
       showZoomControls: parseBoolean(this.getAttribute("show-zoom-controls")),
       animated: parseBoolean(this.getAttribute("animated")),
@@ -246,6 +251,7 @@ export class DominicanRepublicMapElement extends HTMLElementBase {
         onSelectionChange: (selected) =>
           emitEvent(this, "selectionchange", { selected }),
         onMarkerClick: ({ marker }) => emitEvent(this, "markerclick", { marker }),
+        onMunicipalityClick: ({ municipality, province }) => emitEvent(this, "municipalityclick", { municipality, province }),
         onZoomChange: (zoom) => emitEvent(this, "zoomchange", zoom),
         onMapClick: (event) =>
           emitEvent(this, "mapclick", { x: event.clientX, y: event.clientY }),
