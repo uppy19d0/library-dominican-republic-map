@@ -6,6 +6,7 @@ import {
   type ProvinceId,
 } from "dominican-republic-map";
 import "dominican-republic-map/styles.css";
+import { getProvinceMunicipalities } from "dominican-republic-map/geodata";
 
 function buildDemoData() {
   const data: ProvinceData = {};
@@ -32,6 +33,8 @@ function buildDemoData() {
 }
 
 export function App() {
+  const [drillDown, setDrillDown] = useState(true);
+  const city = getProvinceMunicipalities("DO-25")[0];
   const [selected, setSelected] = useState<ProvinceId[]>(["DO-01", "DO-32"]);
   const [lastClicked, setLastClicked] = useState<string>("—");
   const data = useMemo(() => buildDemoData(), []);
@@ -47,9 +50,14 @@ export function App() {
         </p>
       </header>
 
+      <label><input type="checkbox" checked={drillDown} onChange={event => setDrillDown(event.target.checked)} /> Abrir municipios al seleccionar una provincia</label>
+      <p>Los valores son de demostración. Los límites municipales incluidos corresponden a una fuente de 2020.</p>
       <section className="map-panel">
         <DominicanRepublicMap
           className="demo-map"
+          drillDown={drillDown}
+          municipalityData={{ [city.id]: { value: 42, label: "42 servicios", fill: "#99f6e4" } }}
+          onMunicipalityClick={({ municipality, data }) => setLastClicked(`${municipality.name} · ${municipality.id} · ${data?.value ?? "—"}`)}
           height="100%"
           showLabels
           showPopup
@@ -99,7 +107,7 @@ export function App() {
 
       <aside className="sidebar">
         <div>
-          <h2>Última provincia</h2>
+          <h2>Último territorio</h2>
           <p>{lastClicked}</p>
         </div>
         <div>

@@ -1,3 +1,5 @@
+import { GeoJsonTerritoryMap } from './components/GeoJsonTerritoryMap';
+import { parseTerritoryGeoJson, type CustomTerritory } from './data/territory-geojson';
 import { createElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { DominicanRepublicMap } from "./components/DominicanRepublicMap";
@@ -12,6 +14,9 @@ import type {
   ProvinceId,
   ZoomState,
   MunicipalityEvent,
+  MunicipalityData,
+  MunicipalityDataValue,
+  MunicipalityMessages,
 } from "./types";
 
 type SizeAttribute = string | number | undefined;
@@ -20,6 +25,7 @@ type ElementProps = Partial<
   Omit<
     DominicanRepublicMapProps,
     | "onMunicipalityClick"
+    | "onFocusedProvinceChange"
     | "onProvinceClick"
     | "onProvinceDoubleClick"
     | "onProvinceEnter"
@@ -33,9 +39,13 @@ type ElementProps = Partial<
   >
 >;
 
-export type DominicanRepublicMapElementProps = ElementProps;
+type CustomLayerProps = { territorySource?: unknown; territoryData?: MunicipalityData; territoryAttribution?: string };
+export type DominicanRepublicMapElementProps = ElementProps & CustomLayerProps;
 
 export interface DominicanRepublicMapElementEventMap {
+  territoryclick: CustomEvent<{ territory: CustomTerritory; data?: MunicipalityDataValue }>;
+  territoryerror: CustomEvent<{ message: string }>;
+  provinceviewchange: CustomEvent<{ provinceId: ProvinceId | null }>;
   municipalityclick: CustomEvent<Omit<MunicipalityEvent, "nativeEvent">>;
   provinceclick: CustomEvent<Omit<ProvinceEvent, "nativeEvent">>;
   provincedoubleclick: CustomEvent<Omit<ProvinceEvent, "nativeEvent">>;
@@ -59,6 +69,12 @@ const OBSERVED_ATTRIBUTES = [
   "show-popup",
   "close-popup-on-map-click",
   "drill-down",
+  "focused-province",
+  "municipality-data",
+  "municipality-messages",
+  "territory-source",
+  "territory-data",
+  "territory-attribution",
   "enable-zoom",
   "show-zoom-controls",
   "animated",
@@ -139,7 +155,7 @@ export class DominicanRepublicMapElement extends HTMLElementBase {
   }
 
   private root: Root | null = null;
-  private props: ElementProps = {};
+  private props: DominicanRepublicMapElementProps = {};
 
   connectedCallback(): void {
     if (!this.root) {
@@ -157,12 +173,12 @@ export class DominicanRepublicMapElement extends HTMLElementBase {
     this.render();
   }
 
-  set mapProps(value: ElementProps) {
+  set mapProps(value: DominicanRepublicMapElementProps) {
     this.props = value;
     this.render();
   }
 
-  get mapProps(): ElementProps {
+  get mapProps(): DominicanRepublicMapElementProps {
     return this.props;
   }
 
@@ -183,6 +199,9 @@ export class DominicanRepublicMapElement extends HTMLElementBase {
         this.getAttribute("close-popup-on-map-click"),
       ),
       drillDown: parseBoolean(this.getAttribute("drill-down")),
+      focusedProvince: this.hasAttribute("focused-province") ? this.getAttribute("focused-province") as ProvinceId || null : undefined,
+      municipalityData: parseJson<MunicipalityData>(this.getAttribute("municipality-data")),
+      municipalityMessages: parseJson<Partial<MunicipalityMessages>>(this.getAttribute("municipality-messages")),
       enableZoom: parseBoolean(this.getAttribute("enable-zoom")),
       showZoomControls: parseBoolean(this.getAttribute("show-zoom-controls")),
       animated: parseBoolean(this.getAttribute("animated")),
@@ -216,6 +235,22 @@ export class DominicanRepublicMapElement extends HTMLElementBase {
     if (!this.root || !this.isConnected) return;
     const parsed = this.parseAttributes();
     const combined = { ...parsed, ...this.props };
+    const attributeSource = this.getAttribute('territory-source');
+    if (combined.territorySource !== undefined || attributeSource !== null) {
+      try {
+        const source = combined.territorySource ?? JSON.parse(attributeSource ?? 'null');
+        parseTerritoryGeoJson(source);
+        const data = combined.territoryData ?? parseJson<MunicipalityData>(this.getAttribute('territory-data'));
+        const attribution = combined.territoryAttribution ?? this.getAttribute('territory-attribution') ?? 'Application-owned geometry';
+        this.root.render(createElement(GeoJsonTerritoryMap, { source, data, attribution,
+          onTerritoryClick: event => emitEvent(this, 'territoryclick', event) }));
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Invalid territory source';
+        this.root.render(createElement('p', { role: 'alert' }, message));
+        emitEvent(this, 'territoryerror', { message });
+      }
+      return;
+    }
 
     this.root.render(
       createElement(DominicanRepublicMap, {
@@ -251,7 +286,8 @@ export class DominicanRepublicMapElement extends HTMLElementBase {
         onSelectionChange: (selected) =>
           emitEvent(this, "selectionchange", { selected }),
         onMarkerClick: ({ marker }) => emitEvent(this, "markerclick", { marker }),
-        onMunicipalityClick: ({ municipality, province }) => emitEvent(this, "municipalityclick", { municipality, province }),
+        onMunicipalityClick: ({ municipality, province, data }) => emitEvent(this, "municipalityclick", { municipality, province, data }),
+        onFocusedProvinceChange: (provinceId) => emitEvent(this, "provinceviewchange", { provinceId }),
         onZoomChange: (zoom) => emitEvent(this, "zoomchange", zoom),
         onMapClick: (event) =>
           emitEvent(this, "mapclick", { x: event.clientX, y: event.clientY }),

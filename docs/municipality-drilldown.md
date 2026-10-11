@@ -29,3 +29,30 @@ Source: [geoBoundaries DOM ADM2 metadata](https://www.geoboundaries.org/api/curr
 Geometry is distributed under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/). Retain attribution when redistributing it. The library code remains MIT. Changes: normalized names, explicit municipality joins, simplified upstream geometry projected to local SVG coordinates, three-decimal coordinate rounding and province grouping. The source SHA-256 is stored in `src/data/municipality-boundaries.json`. The generator is `scripts/generate-municipality-boundaries.py`; pass the pinned GeoJSON and the exported `MUNICIPALITIES` JSON. Runtime performs no geometry downloads.
 
 The reviewed government and GeoDOM endpoints did not establish a clear redistribution license for a current complete dataset. This release therefore does not claim all 158 current borders. Updating the geometry requires a licensed, dated source and province/municipality join verification.
+
+## Associate application data without changing geography
+
+```tsx
+import { useState } from 'react';
+import { DominicanRepublicMap, type MunicipalityData, type ProvinceId } from 'dominican-republic-map';
+import { getProvinceMunicipalities } from 'dominican-republic-map/geodata';
+
+const city = getProvinceMunicipalities('DO-25')[0];
+const municipalityData: MunicipalityData = {
+  [city.id]: { value: 42, label: '42 services', fill: '#99f6e4', popup: 'Your application data' },
+};
+function CoverageMap() {
+  const [province, setProvince] = useState<ProvinceId | null>(null);
+  return <DominicanRepublicMap drillDown
+    focusedProvince={province} onFocusedProvinceChange={setProvince}
+    data={{ 'DO-25': { value: 120, popup: 'Province coverage' } }}
+    municipalityData={municipalityData}
+    onMunicipalityClick={({ municipality, data }) => console.log(municipality.id, data?.value)} />;
+}
+```
+
+`data` is keyed by province ID; `municipalityData` is keyed by municipality ID. Adding a value does not add a territory or a boundary. Obtain IDs from the geodata helpers; do not guess them from names. Municipal values, labels and popup text appear in the detail list/selection panel; `fill` and `selectedFill` style the polygons. This is explicit styling, not automatic municipal choropleth aggregation.
+
+`focusedProvince` is optional: omit it for automatic internal navigation, or pass an ID/null and update it through `onFocusedProvinceChange`. Municipality UI labels can be translated using `municipalityMessages` (`back`, `instruction`, `list`, `boundaries`, `missing`, `selected`). Municipal fills inherit `colors` defaults. The Web Component supports `municipality-data`, `municipality-messages`, `focused-province` and `provinceviewchange`; `municipalityclick.detail.data` includes the associated data.
+
+For provinces and municipalities with your own IDs and polygons, see the separate [custom GeoJSON layer](custom-territories.md).

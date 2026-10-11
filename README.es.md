@@ -328,3 +328,7 @@ MIT © Luis Aneuris Tavarez De Jesus
 ## Province zoom and municipalities / Provincias y municipios
 
 Use `drillDown` in React or `drill-down` on `<dr-map>` to open a province with municipal polygons, selection, and a back button. See [examples, coverage and geometry license](docs/municipality-drilldown.md). The bundled 2020 snapshot has 154 municipal polygons; four municipalities remain available in the list without invented borders.
+
+## Application data and custom territories / Datos y territorios propios
+
+Version 1.4 adds `municipalityData`, controlled province navigation and a redesigned municipal view. Use the [province/municipality guide](docs/municipality-drilldown.md) to associate data by ID. Use the separate `GeoJsonTerritoryMap` for your own province/municipality IDs and licensed polygons: [GeoJSON contract and examples](docs/custom-territories.md). Included and custom geography remain distinct.

@@ -42,6 +42,9 @@ export type {
   MapPopupTarget,
   MarkerEvent,
   MunicipalityEvent,
+  MunicipalityData,
+  MunicipalityDataValue,
+  MunicipalityMessages,
   Province,
   ProvinceData,
   ProvinceDataValue,
@@ -55,3 +58,8 @@ export type {
 
 export { getProvinceBoundaries, getMissingProvinceBoundaries, MUNICIPALITY_BOUNDARY_SOURCE } from './data/municipalities';
 export type { MunicipalityBoundary } from './data/municipalities';
+
+export { GeoJsonTerritoryMap } from './components/GeoJsonTerritoryMap';
+export type { GeoJsonTerritoryMapProps } from './components/GeoJsonTerritoryMap';
+export { parseTerritoryGeoJson } from './data/territory-geojson';
+export type { CustomTerritory, TerritoryDataset } from './data/territory-geojson';
