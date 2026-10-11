@@ -1,4 +1,5 @@
 import boundaries from './municipality-boundaries.json';
+import peravia from './peravia-boundaries.json';
 import { getProvinceMunicipalities } from 'dominican-republic-geodata';
 import type { ProvinceId } from '../types';
 
@@ -19,9 +20,16 @@ export const MUNICIPALITY_BOUNDARY_SOURCE = Object.freeze({
 });
 
 export function getProvinceBoundaries(provinceId: ProvinceId): readonly MunicipalityBoundary[] {
-  return boundaries.municipalities.filter(item => item.provinceId === provinceId).map(item => ({
+  const source = provinceId === 'DO-17' ? peravia : boundaries;
+  return source.municipalities.filter(item => item.provinceId === provinceId).map(item => ({
     ...item, provinceId, bounds: [item.bounds[0], item.bounds[1], item.bounds[2], item.bounds[3]] as const,
   }));
+}
+
+export function getProvinceBoundaryAttribution(provinceId: ProvinceId): string {
+  return provinceId === 'DO-17'
+    ? 'HDX / OCHA COD-AB DOM v01 · 2017 / validación 2021 · CC BY-IGO. Matanzas: polígono de la unidad histórica; Baní excluye esa área. No constituye un límite legal actualizado.'
+    : 'geoBoundaries / Caribbean GeoPortal · 2020 · CC BY 4.0. Geometría simplificada; no constituye un límite legal actualizado.';
 }
 
 export function getMissingProvinceBoundaries(provinceId: ProvinceId) {
