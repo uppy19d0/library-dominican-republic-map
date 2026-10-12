@@ -18,3 +18,5 @@ examples/basic/.vite
 *.tgz
 
 .security-artifacts/
+
+docs/demo/assets/

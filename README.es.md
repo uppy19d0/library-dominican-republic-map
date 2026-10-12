@@ -11,13 +11,26 @@ Creado por [Luis Aneuris Tavarez De Jesus](https://www.ltavarez.me/).
 
 ## Screenshot
 
-[![Open the interactive dominican-republic-map preview](./docs/assets/screenshot.svg)](https://raw.githack.com/uppy19d0/library-dominican-republic-map/gh-pages/docs/demo/index.html)
+[![Open the interactive dominican-republic-map preview](./docs/assets/interactive-preview.png)](https://raw.githack.com/uppy19d0/library-dominican-republic-map/gh-pages/docs/demo/index.html)
 
 ## Interactive preview
 
 El README de GitHub y npm no permite ejecutar JavaScript embebido, por eso la imagen de arriba abre un demo externo con eventos, choropleth, colores, marcadores, iconos y popups.
 
 [Open interactive preview](https://raw.githack.com/uppy19d0/library-dominican-republic-map/gh-pages/docs/demo/index.html) · [GitHub Pages URL](https://uppy19d0.github.io/library-dominican-republic-map/docs/demo/) · [View demo source](./docs/demo/index.html)
+
+## Nuevos modos opcionales
+
+La navegación provincial sigue siendo el valor por defecto. Activa los límites municipales con `drillDown={true}` en React o `map.mapProps = { drillDown: true }` en el Web Component. Utiliza `municipalityData` para asociar valores por ID, o el componente independiente `GeoJsonTerritoryMap` para cargar geometría propia. Matanzas en Peravia está incluido desde 1.4.1. El Interactive Preview incorpora un control opcional, un editor de valores y la configuración de la vista; sus recursos se generan con el lockfile y se sirven junto a la demo.
+
+```jsx
+// Por defecto: provincias
+<DominicanRepublicMap />
+// Opcional: límites y valores municipales
+<DominicanRepublicMap drillDown municipalityData={{ 'DO-17-02': { value: 42 } }} />
+```
+
+Consulta [parámetros, eventos y cobertura](docs/municipality-drilldown.md) y [GeoJSON propio](docs/custom-territories.md).
 
 ## Features
 

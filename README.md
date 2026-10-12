@@ -12,13 +12,26 @@ Created by [Luis Aneuris Tavarez De Jesus](https://www.ltavarez.me/).
 
 ## Screenshot
 
-[![Open the interactive dominican-republic-map preview](./docs/assets/screenshot.svg)](https://raw.githack.com/uppy19d0/library-dominican-republic-map/gh-pages/docs/demo/index.html)
+[![Open the interactive dominican-republic-map preview](./docs/assets/interactive-preview.png)](https://raw.githack.com/uppy19d0/library-dominican-republic-map/gh-pages/docs/demo/index.html)
 
 ## Interactive Preview
 
 GitHub and npm READMEs cannot run embedded JavaScript, so the screenshot opens an external interactive preview with events, choropleth data, custom colors, markers, icons, and popups.
 
 [Open interactive preview](https://raw.githack.com/uppy19d0/library-dominican-republic-map/gh-pages/docs/demo/index.html) · [GitHub Pages URL](https://uppy19d0.github.io/library-dominican-republic-map/docs/demo/) · [View demo source](./docs/demo/index.html)
+
+## New optional map modes
+
+Province navigation remains the default. Enable municipal drill-down with `drillDown={true}` in React or `map.mapProps = { drillDown: true }` in the Web Component. Add `municipalityData` for values by municipality ID, or use the separate `GeoJsonTerritoryMap` for application-owned boundaries. Matanzas in Peravia is included from 1.4.1. The Interactive Preview now includes an opt-in switch, value editor and the configuration for the selected mode; its runtime assets are built from the lockfile and hosted with the demo.
+
+```jsx
+// Default: provinces
+<DominicanRepublicMap />
+// Optional: municipal boundaries and values
+<DominicanRepublicMap drillDown municipalityData={{ 'DO-17-02': { value: 42 } }} />
+```
+
+See [parameters, events and coverage](docs/municipality-drilldown.md) and [custom GeoJSON](docs/custom-territories.md).
 
 ## Features
 
@@ -308,3 +321,20 @@ Use `drillDown` in React or `drill-down` on `<dr-map>` to open a province with m
 ## Application data and custom territories / Datos y territorios propios
 
 Version 1.4 adds `municipalityData`, controlled province navigation and a redesigned municipal view. Use the [province/municipality guide](docs/municipality-drilldown.md) to associate data by ID. Use the separate `GeoJsonTerritoryMap` for your own province/municipality IDs and licensed polygons: [GeoJSON contract and examples](docs/custom-territories.md). Included and custom geography remain distinct.
+
+
+## Supply-chain verification and runtime permissions
+
+Runtime: React/Web Component rendering with bundled SVG data. Custom GeoJSON is supplied by the application; the map does not download it. Names, values and attribution render as text. The bounded validator checks geometry structure, not legal accuracy or complete topology. MIT code and separately attributed cartographic data retain their own terms.
+
+Install the exact version required by your application and commit your lockfile. Releases request npm provenance from GitHub Actions, and CI checks the dependency graph and package contents before publication. The artifact guard rejects recognized credential patterns, private/environment files, unsafe paths, missing attribution/metadata and unexpected consumer install hooks. It is a focused release check, not proof that every secret or malicious behavior is detectable.
+
+```sh
+npm install --save-exact dominican-republic-map@1.4.2
+npm audit
+npm audit signatures
+```
+
+When the installed graph has no registry dependencies, npm may report that there are no dependency signatures to verify.
+
+Inspect the exact-version [Socket report](https://socket.dev/npm/package/dominican-republic-map/overview/1.4.2) and the npm provenance link. A successful CI check is not the same as a package score of 100. Socket also weighs dependency counts and real adoption; no score, download history or security guarantee is fabricated. Report suspected issues through SECURITY.md.

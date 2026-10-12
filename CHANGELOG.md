@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.4.2
+
+- Preserve Web Component auto-registration when a bundler tree-shakes an element-only import.
+
+- Make municipal drill-down opt-in in the Interactive Preview, with parameters, application values and release guidance.
+- Serve the preview runtime from the locked build rather than remote `@latest` imports.
+
+- Document package runtime permissions, supply-chain verification and scanner limitations.
+- Gate CI/publication on reviewed artifact contents and add regression checks for packaging risks.
+- Keep reviewed dependency update automation and preserve existing runtime APIs.
+
+
 ## 1.4.1
 
 - Fix Matanzas selection in Peravia by adding its licensed historical display polygon.

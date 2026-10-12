@@ -1,6 +1,6 @@
 {
   "name": "dominican-republic-map",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Interactive, touch-friendly Dominican Republic SVG map for React and Web Components (Vue, Svelte, Angular, vanilla).",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -41,10 +41,13 @@
     "docs"
   ],
   "sideEffects": [
-    "**/*.css"
+    "**/*.css",
+    "./src/element.ts",
+    "./dist/element.js",
+    "./dist/element.cjs"
   ],
   "scripts": {
-    "build": "tsup && node scripts/copy-css.js && node scripts/verify-ssr.mjs",
+    "build": "tsup && node scripts/copy-css.js && node scripts/verify-ssr.mjs && node scripts/build-preview.mjs",
     "dev": "tsup --watch",
     "test": "tsx --test test/*.test.ts",
     "typecheck": "tsc --noEmit",
@@ -69,7 +72,8 @@
     "react-dom": "^19.1.0",
     "tsup": "^8.5.0",
     "tsx": "^4.23.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "esbuild": "0.28.1"
   },
   "overrides": {
     "esbuild": "0.28.1"
