@@ -4,27 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>dominican-republic-map demos</title>
-    <link
-      id="mapStyles"
-      rel="stylesheet"
-      href="../../dist/styles.css"
-    />
-    <script>
-      document.querySelector("#mapStyles").addEventListener("error", () => {
-        document.querySelector("#mapStyles").href =
-          "https://unpkg.com/dominican-republic-map@latest/dist/styles.css";
-      });
-    </script>
-    <script type="importmap">
-      {
-        "imports": {
-          "react": "https://esm.sh/react@19.1.0",
-          "react-dom/client": "https://esm.sh/react-dom@19.1.0/client",
-          "react/jsx-runtime": "https://esm.sh/react@19.1.0/jsx-runtime",
-          "dominican-republic-geodata": "https://esm.sh/dominican-republic-geodata@0.2.0"
-        }
-      }
-    </script>
+    <link rel="stylesheet" href="./assets/styles.css" />
     <style>
       :root {
         color-scheme: light;
@@ -131,6 +111,8 @@
         text-align: left;
         padding: 0 12px;
       }
+
+      button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
 
       .tab[aria-selected="true"] {
         border-color: var(--blue);
@@ -317,8 +299,9 @@
 
       @media (max-width: 520px) {
         .tabs {
-          grid-template-columns: 1fr;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+        .tab { padding: 8px 10px; line-height: 1.35; }
 
         .map-panel,
         dr-map {
@@ -326,6 +309,14 @@
           height: 430px;
         }
       }
+      .release-note { padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); line-height: 1.6; }
+      .release-note p { margin: 8px 0; } .release-note a { color: #205a86; }
+      .preview-options { display: grid; gap: 10px; }
+      .preview-options .toggle-row { display: flex; align-items: center; gap: 10px; }
+      .preview-options input[type="number"], .preview-options select, .preview-options button { width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--text); font: inherit; }
+      .preview-options button { cursor: pointer; } .preview-options button:disabled { opacity: .5; cursor: default; }
+      #geodata .map-panel, #geodata dr-map { height: auto; min-height: 560px; overflow: visible; }
+      #geodata .rd-map__root:has(.rd-map__municipality-detail) { height: auto !important; overflow: visible; }
     </style>
   </head>
   <body>
@@ -333,13 +324,18 @@
       <header class="topbar">
         <div>
           <h1>dominican-republic-map</h1>
-          <p>Showcase de selección, choropleth, colores por provincia, iconos, popups y theming.</p>
+          <p>Preview configurable: selección, colores, popups y desglose municipal opcional.</p>
         </div>
         <a class="npm-link" href="https://www.npmjs.com/package/dominican-republic-map">
           npm install dominican-republic-map
         </a>
       </header>
 
+      <section class="release-note" aria-label="Novedades">
+        <strong>Nuevo: municipios, datos por ID y geometrías propias</strong>
+        <p>Desde 1.4.0 puedes activar <code>drillDown</code>, asociar <code>municipalityData</code> o cargar <code>GeoJsonTerritoryMap</code>. En 1.4.1 se añadió el polígono de Matanzas en Peravia. El desglose está desactivado por defecto y no cambia la selección de provincias.</p>
+        <a href="../municipality-drilldown.md">Contrato y cobertura</a> · <a href="https://www.ltavarez.me/docs/dominican-republic-map#territory-integration">Ejemplos React y GeoJSON</a>
+      </section>
       <div class="workspace">
         <nav class="tabs" aria-label="Demos">
           <button class="tab" type="button" data-demo="events" aria-selected="true">
@@ -355,7 +351,7 @@
             Iconos + popups
           </button>
           <button class="tab" type="button" data-demo="geodata" aria-selected="false">
-            Geodata
+            Municipios · opcional
           </button>
           <button class="tab" type="button" data-demo="theming" aria-selected="false">
             Theming
@@ -463,7 +459,6 @@
                   id="markersMap"
                   height="100%"
                   show-labels
-                  drill-down
                   show-popup
                   selection-mode="multiple"
                   default-selected-provinces='["DO-01","DO-25"]'
@@ -507,7 +502,6 @@
                   id="popupMap"
                   height="100%"
                   show-labels
-                  drill-down
                   show-popup
                   selection-mode="multiple"
                   default-selected-provinces='["DO-01","DO-25","DO-32"]'
@@ -587,7 +581,7 @@ map.setAttribute(
             <div class="demo-header">
               <div>
                 <h2>Geodata: provincia → municipios</h2>
-                <p class="muted">Haz click en una provincia para leer municipio principal, cantidad y lista de municipios desde <code>dominican-republic-map/geodata</code>.</p>
+                <p class="muted">Activa el desglose para abrir los límites municipales. Si lo desactivas, el mapa conserva la navegación provincial. Los valores y las etiquetas se asocian por ID.</p>
               </div>
             </div>
             <div class="demo-grid">
@@ -596,14 +590,23 @@ map.setAttribute(
                   id="geodataMap"
                   height="100%"
                   show-labels
-                  drill-down
                   show-popup
                   selection-mode="single"
                   default-selected-provinces='["DO-25"]'
-                  colors='{"defaultFill":"#dbeafe","defaultStroke":"#ffffff","hoverFill":"#60a5fa","selectedFill":"#0f766e","focusStroke":"#f59e0b"}'
+                  colors='{"defaultFill":"#dbeafe","defaultStroke":"#475569","hoverFill":"#60a5fa","selectedFill":"#0f766e","focusStroke":"#f59e0b"}'
                 ></dr-map>
               </section>
               <aside class="inspector">
+                <div class="preview-options">
+                  <label class="toggle-row"><input id="geoDrillDown" type="checkbox" /> Activar desglose municipal (opcional)</label>
+                  <label for="geoFocus">Provincia para explorar</label>
+                  <select id="geoFocus"></select>
+                  <button id="geoOpen" type="button" disabled>Abrir provincia</button>
+                  <label for="geoMunicipality">Municipio</label><select id="geoMunicipality"></select>
+                  <label for="geoValue">Valor de tu aplicación</label><input id="geoValue" type="number" value="42" />
+                  <button id="geoApply" type="button">Aplicar valor por ID</button>
+                  <p id="geoSelection" role="status">Activa el desglose para probar los polígonos.</p>
+                </div>
                 <div class="metric-grid">
                   <div class="metric">
                     <strong id="geoProvince">Santiago</strong>
@@ -627,7 +630,7 @@ map.setAttribute(
               </aside>
             </div>
             <section class="code-panel">
-              <pre><code>import { getProvinceClickPayload } from "dominican-republic-map/geodata";
+              <pre><code id="geoConfigCode">import { getProvinceClickPayload } from "dominican-republic-map/geodata";
 
 &lt;dr-map id="map" show-popup&gt;&lt;/dr-map&gt;
 
@@ -690,14 +693,7 @@ document.querySelector("dr-map").mapProps = {
     </main>
 
     <script type="module">
-      let mapGeodata;
-      try {
-        await import("../../dist/element.js");
-        mapGeodata = await import("../../dist/geodata.js");
-      } catch {
-        await import("https://esm.sh/dominican-republic-map@latest/element?bundle");
-        mapGeodata = await import("https://esm.sh/dominican-republic-map@latest/geodata?bundle");
-      }
+      const mapGeodata = await import("./assets/runtime.js");
 
       const qs = (selector) => document.querySelector(selector);
       const qsa = (selector) => [...document.querySelectorAll(selector)];
@@ -786,6 +782,51 @@ document.querySelector("dr-map").mapProps = {
         });
       }
 
+      const geoMap = qs("#geodataMap");
+      const geoValues = {};
+      function updateGeoConfiguration() {
+        const drillDown = qs("#geoDrillDown").checked;
+        geoMap.mapProps = { ...geoMap.mapProps, drillDown, municipalityData: { ...geoValues }, focusedProvince: drillDown ? geoMap.mapProps.focusedProvince : null };
+        qs("#geoOpen").disabled = !drillDown;
+        qs("#geoConfigCode").textContent = `// Default: provincial navigation. Municipal drill-down is opt-in.
+<dr-map id="map"></dr-map>
+
+map.mapProps = ${JSON.stringify({ drillDown, municipalityData: geoValues }, null, 2)};
+
+map.addEventListener("municipalityclick", ({ detail }) => {
+  console.log(detail.municipality.id, detail.data?.value);
+});`;
+      }
+      for (const province of mapGeodata.PROVINCES ?? []) {
+        qs("#geoFocus").add(new Option(province.name, province.id));
+      }
+      // The geodata entry exports catalog helpers; derive provinces from the catalog.
+      if (!qs("#geoFocus").options.length) {
+        const provinces = [...new Map(mapGeodata.MUNICIPALITIES.map(city => [city.provinceId, city.provinceId])).keys()];
+        for (const id of provinces) {
+          const payload = mapGeodata.getProvinceClickPayload(id);
+          qs("#geoFocus").add(new Option(payload.province.name, id));
+        }
+      }
+      qs("#geoFocus").value = "DO-25";
+      function updateGeoChoices() {
+        const payload = mapGeodata.getProvinceClickPayload(qs("#geoFocus").value);
+        qs("#geoMunicipality").replaceChildren(...payload.municipalities.map(city => new Option(city.name, city.id)));
+        updateGeodataPanel(payload.province.id);
+      }
+      qs("#geoFocus").addEventListener("change", updateGeoChoices);
+      qs("#geoDrillDown").addEventListener("change", () => { updateGeoConfiguration(); qs("#geoSelection").textContent = qs("#geoDrillDown").checked ? "Desglose activado: abre una provincia." : "Desglose desactivado: navegación provincial."; });
+      qs("#geoOpen").addEventListener("click", () => { geoMap.mapProps = { ...geoMap.mapProps, focusedProvince: qs("#geoFocus").value }; });
+      qs("#geoApply").addEventListener("click", () => {
+        const value = Number(qs("#geoValue").value);
+        if (!qs("#geoValue").value.trim() || !Number.isFinite(value)) { qs("#geoSelection").textContent = "Introduce un número finito."; return; }
+        const id = qs("#geoMunicipality").value; geoValues[id] = { value, label: String(value) };
+        updateGeoConfiguration(); qs("#geoSelection").textContent = `Aplicado: ${id} → ${value}`;
+      });
+      geoMap.addEventListener("municipalityclick", ({ detail }) => { qs("#geoMunicipality").value = detail.municipality.id; qs("#geoSelection").textContent = `${detail.municipality.name} · ${detail.municipality.id} · ${detail.data?.value ?? "—"}`; });
+      geoMap.addEventListener("provinceviewchange", ({ detail }) => { geoMap.mapProps = { ...geoMap.mapProps, focusedProvince: detail.provinceId }; });
+      updateGeoChoices(); updateGeoConfiguration();
+
       function showDemo(id) {
         qsa(".tab").forEach((button) => {
           button.setAttribute("aria-selected", String(button.dataset.demo === id));
@@ -809,7 +850,6 @@ document.querySelector("dr-map").mapProps = {
       qsa("#iconToggles input").forEach((input) => {
         input.addEventListener("change", () => {
           updatePopupMarkers();
-      updateGeodataPanel("DO-25");
           pushLog(
             "#popupLog",
             `${input.checked ? "habilitado" : "oculto"}: ${input.value}`
@@ -861,7 +901,8 @@ document.querySelector("dr-map").mapProps = {
       });
 
       qs("#geodataMap").addEventListener("provinceclick", (event) => {
-        updateGeodataPanel(event.detail.province.id);
+        qs("#geoFocus").value = event.detail.province.id;
+        updateGeoChoices();
       });
 
       customElements.whenDefined("dr-map").then(() => {
